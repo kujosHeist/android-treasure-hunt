@@ -16,6 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CreateJoinHuntActivity"
+            android:label="@string/title_activity_create_hunt" >
+        </activity>
+        <activity
+            android:name=".CreateHuntActivity"
+            android:label="@string/title_activity_create_hunt" >
+        </activity>
+        <activity
+            android:name=".JoinHuntActivity"
+            android:label="@string/title_activity_join_hunt" >
+        </activity>
     </application>
 
 </manifest>
