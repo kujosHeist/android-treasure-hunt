@@ -28,6 +28,10 @@
             android:name=".JoinHuntActivity"
             android:label="@string/title_activity_join_hunt" >
         </activity>
+        <activity
+            android:name=".TeamSelectActivity"
+            android:label="@string/title_activity_team_select" >
+        </activity>
     </application>
 
 </manifest>

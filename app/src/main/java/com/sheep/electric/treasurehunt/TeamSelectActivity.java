@@ -1,27 +1,42 @@
 package com.sheep.electric.treasurehunt;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class CreateHuntActivity extends Activity {
+public class TeamSelectActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_hunt);
-    }
+        setContentView(R.layout.activity_team_select);
 
+        Intent intent = getIntent();
+
+        String userName = intent.getStringExtra("userName");
+        String huntName = intent.getStringExtra("huntName");
+        String huntLocation = intent.getStringExtra("huntLocation");
+
+        TextView textView1 = (TextView) findViewById(R.id.hunt_location_display);
+        textView1.setText(huntLocation);
+
+        TextView textView2 = (TextView) findViewById(R.id.hunt_name_display);
+        textView2.setText(huntName);
+
+        TextView textView3 = (TextView) findViewById(R.id.user_name_display);
+        textView3.setText(userName);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_hunt, menu);
+        getMenuInflater().inflate(R.menu.menu_team_select, menu);
         return true;
     }
 
@@ -38,28 +53,5 @@ public class CreateHuntActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void createHunt(View view){
-        Intent intent = new Intent(this, TeamSelectActivity.class);
-
-        EditText editText = (EditText) findViewById(R.id.user_name);
-        String userName = editText.getText().toString();
-        intent.putExtra("userName", userName);
-
-        editText = (EditText) findViewById(R.id.hunt_name);
-        String huntName = editText.getText().toString();
-        intent.putExtra("huntName", huntName);
-
-        editText = (EditText) findViewById(R.id.hunt_location);
-        String huntLocation = editText.getText().toString();
-        intent.putExtra("huntLocation", huntLocation);  // should use static final strings for key
-
-
-
-        startActivity(intent);
-
-
-
     }
 }

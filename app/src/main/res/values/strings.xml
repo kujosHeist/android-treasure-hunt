@@ -12,6 +12,9 @@
     <string name="enter_your_name">Enter Your Name</string>
     <string name="enter_hunt_name">Enter Hunt Name</string>
     <string name="enter_hunt_location">Enter Hunt Location</string>
+    <string name="title_activity_team_select">TeamSelectActivity</string>
+
+
 
 
 </resources>
