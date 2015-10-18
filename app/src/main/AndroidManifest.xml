@@ -18,17 +18,18 @@
         </activity>
         <activity
             android:name=".CreateJoinHuntActivity"
-            android:label="@string/title_activity_create_hunt" >
+            android:label="@string/title_activity_start_hunt" >
         </activity>
         <activity
-            android:name=".CreateHuntActivity"
-            android:label="@string/title_activity_create_hunt" >
+            android:name=".StartHuntActivity"
+            android:label="@string/title_activity_start_hunt" >
         </activity>
         <activity
             android:name=".JoinHuntActivity"
             android:label="@string/title_activity_join_hunt" >
         </activity>
         <activity
+<<<<<<< HEAD
             android:name=".SelectTeamActivity"
             android:label="@string/select_team" >
         </activity>
@@ -37,6 +38,15 @@
             android:label="@string/team_options" >
         </activity>
 
+=======
+            android:name=".TeamSelectActivity"
+            android:label="@string/title_activity_team_select" >
+        </activity>
+        <activity
+            android:name=".ClueDisplayActivty"
+            android:label="@string/title_activity_clue_display" >
+        </activity>
+>>>>>>> a342fb2a72fd619845d8e1bee31612836762a19b
     </application>
 
 </manifest>
