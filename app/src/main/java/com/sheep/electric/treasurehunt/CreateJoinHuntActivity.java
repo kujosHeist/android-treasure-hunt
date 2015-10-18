@@ -38,8 +38,8 @@ public class CreateJoinHuntActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createHunt(View view){
-        Intent intent = new Intent(this, CreateHuntActivity.class);
+    public void startHunt(View view){
+        Intent intent = new Intent(this, StartHuntActivity.class);
         startActivity(intent);
     }
 

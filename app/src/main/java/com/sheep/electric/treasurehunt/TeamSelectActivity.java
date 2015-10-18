@@ -18,19 +18,10 @@ public class TeamSelectActivity extends Activity {
         setContentView(R.layout.activity_team_select);
 
         Intent intent = getIntent();
-
         String userName = intent.getStringExtra("userName");
-        String huntName = intent.getStringExtra("huntName");
-        String huntLocation = intent.getStringExtra("huntLocation");
+        TextView textView = (TextView) findViewById(R.id.user_name_display);
 
-        TextView textView1 = (TextView) findViewById(R.id.hunt_location_display);
-        textView1.setText(huntLocation);
-
-        TextView textView2 = (TextView) findViewById(R.id.hunt_name_display);
-        textView2.setText(huntName);
-
-        TextView textView3 = (TextView) findViewById(R.id.user_name_display);
-        textView3.setText(userName);
+        textView.setText(userName);
     }
 
     @Override

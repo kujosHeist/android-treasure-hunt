@@ -18,11 +18,11 @@
         </activity>
         <activity
             android:name=".CreateJoinHuntActivity"
-            android:label="@string/title_activity_create_hunt" >
+            android:label="@string/title_activity_start_hunt" >
         </activity>
         <activity
-            android:name=".CreateHuntActivity"
-            android:label="@string/title_activity_create_hunt" >
+            android:name=".StartHuntActivity"
+            android:label="@string/title_activity_start_hunt" >
         </activity>
         <activity
             android:name=".JoinHuntActivity"
