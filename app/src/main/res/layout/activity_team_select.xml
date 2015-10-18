@@ -8,9 +8,14 @@
     android:orientation="vertical">
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hunt_selected"
+        android:textSize="40dp"/>
 
     <TextView android:text="@string/default_team_name" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:textSize="40dp" />
+        android:layout_height="wrap_content" android:textSize="30dp" />
 
 
     
@@ -22,6 +27,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start_hunt"/>
+        android:text="@string/start_hunt"
+        android:onClick="startGame"/>
 
 </LinearLayout>

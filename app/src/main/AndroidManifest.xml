@@ -32,6 +32,10 @@
             android:name=".TeamSelectActivity"
             android:label="@string/title_activity_team_select" >
         </activity>
+        <activity
+            android:name=".ClueDisplayActivty"
+            android:label="@string/title_activity_clue_display" >
+        </activity>
     </application>
 
 </manifest>

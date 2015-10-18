@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -18,14 +19,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartHuntActivity extends Activity {
+public class StartHuntActivity extends Activity implements AdapterView.OnItemSelectedListener {
+
+    private String huntSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_hunt);
 
+        // set up the drop down list of the hunts to choose from
         Spinner spinner = (Spinner) findViewById(R.id.hunt_spinner);
+        spinner.setOnItemSelectedListener(this);
 
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.hunt_list, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -61,16 +66,18 @@ public class StartHuntActivity extends Activity {
         EditText editText = (EditText) findViewById(R.id.user_name);
         String userName = editText.getText().toString();
         intent.putExtra("userName", userName);
-
-
-
-
-
-
-
+        intent.putExtra("huntName", huntSelected);
         startActivity(intent);
+    }
 
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+        huntSelected = (String) parent.getItemAtPosition(pos);
+    }
 
-
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
     }
 }
