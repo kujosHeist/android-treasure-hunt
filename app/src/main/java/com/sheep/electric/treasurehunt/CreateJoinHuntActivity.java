@@ -47,4 +47,8 @@ public class CreateJoinHuntActivity extends Activity {
         Intent intent = new Intent(this, JoinHuntActivity.class);
         startActivity(intent);
     }
+
+
+
+
 }

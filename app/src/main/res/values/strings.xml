@@ -11,6 +11,11 @@
     <string name="enter_your_name">Enter Your Name</string>
     <string name="enter_hunt_name">Enter Hunt Name</string>
     <string name="enter_hunt_location">Enter Hunt Location</string>
+<<<<<<< HEAD
+    <string name="select_team">Select Team</string>
+    <string name="team_options">Enter Team Details</string>
+
+=======
     <string name="title_activity_team_select">TeamSelectActivity</string>
     <string name="enter_team_name">Enter Team Name</string>
     <string name="default_team_name">Team Alpha</string>
@@ -24,4 +29,5 @@
     <string name="show_on_map">Show on Map</string>
     <string name="take_picture">Take Picture</string>
     <string name="task">Task:</string>
+>>>>>>> a342fb2a72fd619845d8e1bee31612836762a19b
 </resources>

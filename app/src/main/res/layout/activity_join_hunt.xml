@@ -7,7 +7,16 @@
     android:orientation="vertical"
     tools:context="com.sheep.electric.treasurehunt.JoinHuntActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_team"
+        android:id="@+id/selectTeam"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="selectTeam" />
+
 
 </LinearLayout>
