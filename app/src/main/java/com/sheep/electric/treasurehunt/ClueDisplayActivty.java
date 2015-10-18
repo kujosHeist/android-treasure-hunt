@@ -1,10 +1,15 @@
 package com.sheep.electric.treasurehunt;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.Locale;
 
 public class ClueDisplayActivty extends Activity {
 
@@ -12,7 +17,6 @@ public class ClueDisplayActivty extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
-
     }
 
     @Override
@@ -37,7 +41,17 @@ public class ClueDisplayActivty extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void openMap(View view){}
+    public void openMap(View view){
+        //Kilkenny City = 52.6540697,-7.2568245
+        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", 52.6540697, -7.2568245);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
 
-    public void takePhoto(View view){}
+        startActivity(intent);
+    }
+
+    public void takePhoto(View view){
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivity(intent);
+    }
 }
