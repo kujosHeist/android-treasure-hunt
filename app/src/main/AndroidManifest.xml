@@ -29,12 +29,20 @@
             android:label="@string/title_activity_join_hunt" >
         </activity>
         <activity
-
             android:name=".SelectTeamActivity"
             android:label="@string/select_team" >
         </activity>
         <activity
             android:name=".TeamOptionsActivity"
+            android:label="@string/team_options" >
+        </activity>
+        <activity
+            android:name=".TeamSelectActivity"
+            android:label="@string/team_options" >
+        </activity>
+
+        <activity
+            android:name=".ClueDisplayActivty"
             android:label="@string/team_options" >
         </activity>
 
