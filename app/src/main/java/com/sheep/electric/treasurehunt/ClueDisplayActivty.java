@@ -1,28 +1,43 @@
 package com.sheep.electric.treasurehunt;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ClueDisplayActivty extends Activity {
+public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
+        // if you want to load map from fragment which is already defined in the layout
+       //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+      // mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -45,14 +60,6 @@ public class ClueDisplayActivty extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void openMap(View view){
-        //Kilkenny City = 52.6540697,-7.2568245
-        //String uri = String.format(Locale.ENGLISH, "geo:%f,%f", 52.6540697, -7.2568245);
-        //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
     }
 
 
@@ -140,5 +147,28 @@ public class ClueDisplayActivty extends Activity {
                 // Video capture failed, advise user
             }
         }
+    }
+
+
+
+    // opens up seperate activity and displays it
+    public void openMap(View view){
+        android.support.v4.app.FragmentManager fm =  getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+        SupportMapFragment mapsActivity = new SupportMapFragment();
+
+        mapsActivity.getMapAsync(this);
+
+        ft.replace(R.id.mapOrCameraDisplay,  mapsActivity);
+
+        ft.commit();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng sydney = new LatLng(-33.867, 151.206);
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+        googleMap.addMarker(new MarkerOptions().title("Sydney").snippet(("Most people in Oz")).position(sydney));
     }
 }
