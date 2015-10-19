@@ -28,5 +28,6 @@
     <string name="show_on_map">Show on Map</string>
     <string name="take_picture">Take Picture</string>
     <string name="task">Task:</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
