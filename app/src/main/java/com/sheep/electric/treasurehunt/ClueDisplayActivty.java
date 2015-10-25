@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +17,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -62,24 +66,52 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
         return super.onOptionsItemSelected(item);
     }
 
-
+    // Camera code ******************************************************************************
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+
     private Uri fileUri;
 
     public void takePhoto(View view){
-
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-       // fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-       // intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
 
         // start the image capture Intent
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("data: " + data);
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Image captured and saved to fileUri specified in the Intent
+                Toast.makeText(this, "Image saved to:\n" +
+                  fileUri.toString(), Toast.LENGTH_LONG).show();
+
+                Bitmap image = BitmapFactory.decodeFile(fileUri.getPath());
+                ImageView imageView = (ImageView) findViewById(R.id.captured_picture);
+                imageView.setImageBitmap(image);
+             
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // User cancelled the image capture
+            } else {
+                // Image capture failed, advise user
+            }
+        }
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, fileUri);
+
+        this.sendBroadcast(mediaScanIntent);
+    }
 
     /** Create a file Uri for saving an image or video */
     private static Uri getOutputMediaFileUri(int type){
@@ -88,8 +120,7 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
 
     /** Create a File for saving an image or video */
     private static File getOutputMediaFile(int type){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
+        System.out.println("SD Mounted: " + Environment.getExternalStorageState());
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "MyCameraApp");
@@ -120,48 +151,45 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
         return mediaFile;
     }
 
-    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Image saved to:\n" +
-                        data.getData(), Toast.LENGTH_LONG).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the image capture
-            } else {
-                // Image capture failed, advise user
-            }
-        }
-
-        if (requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // Video captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Video saved to:\n" +
-                        data.getData(), Toast.LENGTH_LONG).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the video capture
-            } else {
-                // Video capture failed, advise user
-            }
-        }
-    }
 
 
+
+    // **************************************************
+
+    SupportMapFragment mapsActivity;
+    android.support.v4.app.FragmentTransaction ft;
+    android.support.v4.app.FragmentManager fm;
+
+//    View blankFrameLayout = findViewById(R.id.mapOrCameraDisplay);
 
     // opens up seperate activity and displays it
     public void openMap(View view){
-        android.support.v4.app.FragmentManager fm =  getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
-        SupportMapFragment mapsActivity = new SupportMapFragment();
 
-        mapsActivity.getMapAsync(this);
+        if(mapsActivity == null){
+            fm = getSupportFragmentManager();
+            ft = fm.beginTransaction();
+            mapsActivity = new SupportMapFragment();
 
-        ft.replace(R.id.mapOrCameraDisplay,  mapsActivity);
 
-        ft.commit();
+            mapsActivity.getMapAsync(this);
+
+
+
+            ft.replace(R.id.mapOrCameraDisplay,  mapsActivity, "tag");
+            ft.commit();
+        }else{
+            System.out.println("Map already there");
+            /*
+            //mapsActivity.getMapAsync(this);
+            fm = getSupportFragmentManager();
+            ft = fm.beginTransaction();
+            int fragId = fm.findFragmentByTag("tag").getId();
+
+            ft.replace(fragId,  blankFrameLayout);
+            System.out.println("Replacing with tag: " + fragId);
+            */
+
+        }
     }
 
     @Override
