@@ -1,10 +1,8 @@
 package com.sheep.electric.treasurehunt;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,13 +10,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.text.Layout;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
+import android.widget.Button;
+
 import android.widget.ImageView;
+
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,17 +33,43 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
-public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCallback {
+public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private Clue[] mClueBank;
+    private int mCurrentClueIndex = 0;
+
+    private TextView mClueTextView;
+
+    // temporary measure, will be declared in a db eventually
+    public void generateClues(){
+        String[] clueArray = getResources().getStringArray(R.array.clue_list);
+        String[] clueTypeArray = getResources().getStringArray(R.array.clue_type_list);
+        String[] clueAnswerArray = getResources().getStringArray(R.array.clue_answer_list);
+        String[] clueLocationArray = getResources().getStringArray(R.array.clue_location_list);
+
+        int numOfClues = clueArray.length;
+
+        mClueBank = new Clue[numOfClues];
+
+        for(int i = 0; i < numOfClues; i++){
+            mClueBank[i] = new Clue(clueArray[i], Integer.parseInt(clueTypeArray[i]), clueAnswerArray[i], clueLocationArray[i]);
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
+        generateClues();
+
+        mClueTextView = (TextView) findViewById(R.id.clue_text);
+        mClueTextView.setText(mClueBank[mCurrentClueIndex].getClueText());
+
         // if you want to load map from fragment which is already defined in the layout
-       //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-      // mapFragment.getMapAsync(this);
+        // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        // mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -87,7 +115,6 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("data: " + data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // Image captured and saved to fileUri specified in the Intent
@@ -95,9 +122,37 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
                   fileUri.toString(), Toast.LENGTH_LONG).show();
 
                 Bitmap image = BitmapFactory.decodeFile(fileUri.getPath());
-                ImageView imageView = (ImageView) findViewById(R.id.captured_picture);
+                final ImageView imageView = (ImageView) findViewById(R.id.captured_picture);
                 imageView.setImageBitmap(image);
-             
+
+                galleryAddPic();   // not working
+
+                ViewGroup layout = (ViewGroup) findViewById(R.id.button_layout);
+                Button bt = new Button(this);
+                bt.setText("Save");
+
+                bt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(v.getContext(), "Image Saved", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                Button bt2 = new Button(this);
+                bt2.setText("Delete");
+
+                bt2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imageView.setImageBitmap(null);
+                        File file = new File(fileUri.toString());
+                        file.delete();
+                        Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                layout.addView(bt);
+                layout.addView(bt2);
 
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
@@ -107,8 +162,12 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    // currently not working, not saving to the phones gallery
     private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, fileUri);
+
+        File file = new File(fileUri.getPath());
+        Uri content = Uri.fromFile(file);
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, content);
 
         this.sendBroadcast(mediaScanIntent);
     }
@@ -123,14 +182,14 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
         System.out.println("SD Mounted: " + Environment.getExternalStorageState());
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+                Environment.DIRECTORY_PICTURES), "TreasureHunt");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
-                Log.d("MyCameraApp", "failed to create directory");
+                Log.d("ClueActivityActivity", "failed to create directory");
                 return null;
             }
         }
@@ -150,17 +209,11 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
 
         return mediaFile;
     }
-
-
-
-
     // **************************************************
 
     SupportMapFragment mapsActivity;
-    android.support.v4.app.FragmentTransaction ft;
     android.support.v4.app.FragmentManager fm;
-
-//    View blankFrameLayout = findViewById(R.id.mapOrCameraDisplay);
+    android.support.v4.app.FragmentTransaction ft;
 
     // opens up seperate activity and displays it
     public void openMap(View view){
@@ -168,17 +221,18 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
         if(mapsActivity == null){
             fm = getSupportFragmentManager();
             ft = fm.beginTransaction();
+
             mapsActivity = new SupportMapFragment();
-
-
             mapsActivity.getMapAsync(this);
-
-
 
             ft.replace(R.id.mapOrCameraDisplay,  mapsActivity, "tag");
             ft.commit();
         }else{
-            System.out.println("Map already there");
+
+            ft = fm.beginTransaction();
+            ft.remove(mapsActivity);
+            mapsActivity = null;
+            ft.commit();
             /*
             //mapsActivity.getMapAsync(this);
             fm = getSupportFragmentManager();
@@ -194,9 +248,9 @@ public class ClueDisplayActivty extends FragmentActivity implements OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(-33.867, 151.206);
+        LatLng sydney = new LatLng(53.307262,-6.219077);
         googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
         googleMap.addMarker(new MarkerOptions().title("Sydney").snippet(("Most people in Oz")).position(sydney));
     }
 }

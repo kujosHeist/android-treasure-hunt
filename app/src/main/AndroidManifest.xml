@@ -55,7 +55,7 @@
             android:label="@string/team_options" >
         </activity>
         <activity
-            android:name=".ClueDisplayActivty"
+            android:name=".ClueDisplayActivity"
             android:label="@string/team_options" >
         </activity>
 

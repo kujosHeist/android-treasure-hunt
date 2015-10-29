@@ -24,10 +24,12 @@
     <string name="hunt_name1">UCD Hunt</string>
     <string name="select_hunt">Select Hunt</string>
     <string name="title_activity_clue_display">Clue Display</string>
-    <string name="first_clue">Take a Swan Selfie</string>
+
     <string name="show_on_map">Show on Map</string>
     <string name="take_picture">Take Picture</string>
-    <string name="task">Task:</string>
+    <string name="clue">Clue: </string>
     <string name="title_activity_maps">Map</string>
+    <string name="delete_image">Delete Image</string>
+    <string name="save_image">Save Image</string>
 
 </resources>
