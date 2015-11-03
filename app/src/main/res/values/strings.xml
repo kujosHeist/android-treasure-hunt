@@ -31,5 +31,8 @@
     <string name="title_activity_maps">Map</string>
     <string name="delete_image">Delete Image</string>
     <string name="save_image">Save Image</string>
+    <string name="enter_clue_answer">Enter Your Answer:</string>
+    <string name="submit_location_button">Submit Location</string>
+    <string name="submit_answer">Submit Answer</string>
 
 </resources>

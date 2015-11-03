@@ -2,7 +2,7 @@ package com.sheep.electric.treasurehunt;
 
 
 import android.content.Intent;
-import android.content.res.Resources;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import android.widget.TextView;
@@ -39,7 +41,57 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private Clue[] mClueBank;
     private int mCurrentClueIndex = 0;
 
+
+    private ImageButton mArrowLeftButton;
+    private ImageButton mArrowRightButton;
+    private Button mTakePhotoButton;
     private TextView mClueTextView;
+    private EditText mClueAnswer;
+    private Button mSubmitLocationButton;
+
+    private Button mSavePicture;
+
+    private Button mSubmitAnswer;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_clue_display);
+        generateClues();
+
+        mClueTextView = (TextView) findViewById(R.id.clue_text);
+        mClueAnswer = (EditText) findViewById(R.id.clue_answer);
+        mTakePhotoButton = (Button) findViewById(R.id.take_photo_button);
+        mSubmitLocationButton = (Button) findViewById(R.id.submit_location_button);
+
+        updateClue();
+
+        mArrowLeftButton = (ImageButton) findViewById(R.id.arrow_left);
+        mArrowRightButton = (ImageButton) findViewById(R.id.arrow_right);
+
+        mArrowLeftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentClueIndex = (mCurrentClueIndex - 1) % mClueBank.length;
+                if(mCurrentClueIndex < 0){
+                    mCurrentClueIndex += mClueBank.length;
+                }
+                updateClue();
+            }
+        });
+
+        mArrowRightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentClueIndex = (mCurrentClueIndex + 1) % mClueBank.length;
+                updateClue();
+            }
+        });
+        // if you want to load map from fragment which is already defined in the layout
+        // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        // mapFragment.getMapAsync(this);
+    }
 
     // temporary measure, will be declared in a db eventually
     public void generateClues(){
@@ -57,19 +109,32 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    public void updateClue(){
+        Clue clue = mClueBank[mCurrentClueIndex];
+        mClueTextView.setText(clue.getClueText());
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clue_display);
-        generateClues();
+        switch(clue.getClueType()) {
+            case Clue.TEXT:
+                mClueAnswer.setVisibility(EditText.VISIBLE);
 
-        mClueTextView = (TextView) findViewById(R.id.clue_text);
-        mClueTextView.setText(mClueBank[mCurrentClueIndex].getClueText());
+                mTakePhotoButton.setVisibility(Button.GONE);
+                mSubmitLocationButton.setVisibility(Button.GONE);
 
-        // if you want to load map from fragment which is already defined in the layout
-        // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        // mapFragment.getMapAsync(this);
+                break;
+            case Clue.PICTURE:
+                mTakePhotoButton.setVisibility(Button.VISIBLE);
+
+                mClueAnswer.setVisibility(EditText.GONE);
+                mSubmitLocationButton.setVisibility(Button.GONE);
+                break;
+
+            case Clue.LOCATION:
+                mSubmitLocationButton.setVisibility(Button.VISIBLE);
+
+                mClueAnswer.setVisibility(EditText.GONE);
+                mTakePhotoButton.setVisibility(Button.GONE);
+
+        }
     }
 
     @Override

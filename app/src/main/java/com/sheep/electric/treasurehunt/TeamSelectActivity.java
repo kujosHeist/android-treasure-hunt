@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.UUID;
+
 public class TeamSelectActivity extends Activity {
 
     @Override
@@ -16,15 +18,19 @@ public class TeamSelectActivity extends Activity {
         setContentView(R.layout.activity_team_select);
 
         Intent intent = getIntent();
-        String userName = intent.getStringExtra("userName");
+        //String userName = intent.getStringExtra("userName");
+
+        String playerID = intent.getStringExtra("playerId");
         TextView textView = (TextView) findViewById(R.id.user_name_display);
 
-        String huntName = intent.getStringExtra("huntName");
         TextView textView1 = (TextView) findViewById(R.id.hunt_selected);
 
+        Players playersDb = new Players(this);
+        Player player = playersDb.getPlayer(UUID.fromString(playerID));
 
-        textView.setText(userName);
-        textView1.setText(huntName);
+
+        textView.setText(player.getName());
+        textView1.setText(player.getHunt());
     }
 
     @Override

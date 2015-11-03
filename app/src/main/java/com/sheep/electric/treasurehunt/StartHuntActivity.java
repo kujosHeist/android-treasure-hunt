@@ -2,26 +2,22 @@ package com.sheep.electric.treasurehunt;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StartHuntActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
-    private String huntSelected;
+    private String mHuntSelected;
+
+
+    private static final String DEFAULT_TEAM_NAME = "Alpha";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +61,22 @@ public class StartHuntActivity extends Activity implements AdapterView.OnItemSel
 
         EditText editText = (EditText) findViewById(R.id.user_name);
         String userName = editText.getText().toString();
-        intent.putExtra("userName", userName);
-        intent.putExtra("huntName", huntSelected);
+
+        Player player = new Player(userName, mHuntSelected, DEFAULT_TEAM_NAME);
+
+        Players playersDb = new Players(this);
+        playersDb.addPlayer(player);
+
+        String uuid = player.getId().toString();
+
+        intent.putExtra("playerId", uuid);
         startActivity(intent);
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        huntSelected = (String) parent.getItemAtPosition(pos);
+        mHuntSelected = (String) parent.getItemAtPosition(pos);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
