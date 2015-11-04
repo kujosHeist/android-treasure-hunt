@@ -5,7 +5,7 @@
     <string name="button_login_text">Login</string>
     <string name="button_options_text">Options</string>
     <string name="title_activity_start_hunt">Start Hunt</string>
-    <string name="button_createHunt_text">Start Hunt</string>
+    <string name="create_hunt_button_text">Start Hunt</string>
     <string name="button_joinHunt_text">Join Hunt</string>
     <string name="title_activity_join_hunt">Join Hunt</string>
     <string name="enter_your_name">Enter Your Name</string>

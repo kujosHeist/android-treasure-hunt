@@ -5,7 +5,7 @@ package database;
  */
 public class PlayersDbSchema {
     public static final class PlayersTable {
-        public static final String NAME = "plasyers";
+        public static final String NAME = "players";
 
         public static final class Cols{
             public static final String UUID = "uuid";

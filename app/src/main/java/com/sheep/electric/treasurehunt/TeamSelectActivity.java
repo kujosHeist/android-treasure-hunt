@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.UUID;
 
 public class TeamSelectActivity extends Activity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,19 +20,17 @@ public class TeamSelectActivity extends Activity {
         setContentView(R.layout.activity_team_select);
 
         Intent intent = getIntent();
-        //String userName = intent.getStringExtra("userName");
 
         String playerID = intent.getStringExtra("playerId");
-        TextView textView = (TextView) findViewById(R.id.user_name_display);
+        TextView userNameTextView = (TextView) findViewById(R.id.user_name_textview);
 
-        TextView textView1 = (TextView) findViewById(R.id.hunt_selected);
+        TextView huntNameTextView = (TextView) findViewById(R.id.hunt_name_textview);
 
         Players playersDb = new Players(this);
         Player player = playersDb.getPlayer(UUID.fromString(playerID));
 
-
-        textView.setText(player.getName());
-        textView1.setText(player.getHunt());
+        userNameTextView.setText(player.getName());
+        huntNameTextView.setText(player.getHunt());
     }
 
     @Override
@@ -53,10 +53,5 @@ public class TeamSelectActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void startGame(View view){
-        Intent intent = new Intent(this, ClueDisplayActivity.class);
-        startActivity(intent);
     }
 }

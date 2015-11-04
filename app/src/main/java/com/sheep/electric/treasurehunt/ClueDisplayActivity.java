@@ -3,6 +3,8 @@ package com.sheep.electric.treasurehunt;
 
 import android.content.Intent;
 
+import android.content.res.XmlResourceParser;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -32,15 +34,28 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import database.CluesBaseHelper;
 
 public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    public static final String TAG = "ClueDisplayActivity";
+
     private Clue[] mClueBank;
     private int mCurrentClueIndex = 0;
-
 
     private ImageButton mArrowLeftButton;
     private ImageButton mArrowRightButton;
@@ -50,7 +65,6 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private Button mSubmitLocationButton;
 
     private Button mSavePicture;
-
     private Button mSubmitAnswer;
 
 
@@ -58,6 +72,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
+
         generateClues();
 
         mClueTextView = (TextView) findViewById(R.id.clue_text);
@@ -95,17 +110,51 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     // temporary measure, will be declared in a db eventually
     public void generateClues(){
-        String[] clueArray = getResources().getStringArray(R.array.clue_list);
-        String[] clueTypeArray = getResources().getStringArray(R.array.clue_type_list);
-        String[] clueAnswerArray = getResources().getStringArray(R.array.clue_answer_list);
-        String[] clueLocationArray = getResources().getStringArray(R.array.clue_location_list);
+        Clues cluesDb = new Clues(this);
 
-        int numOfClues = clueArray.length;
+        if(cluesDb.getClues().size() == 0){
+            Log.d(TAG, "Clue db is empty, adding clues from hunts.xml");
+            addCluesFromXml();
+        }
 
-        mClueBank = new Clue[numOfClues];
+        Clues cluesDbase = new Clues(this);
 
-        for(int i = 0; i < numOfClues; i++){
-            mClueBank[i] = new Clue(clueArray[i], Integer.parseInt(clueTypeArray[i]), clueAnswerArray[i], clueLocationArray[i]);
+        ArrayList<Clue> clueList = (ArrayList<Clue>) cluesDbase.getClues();
+
+        mClueBank = clueList.toArray(new Clue[clueList.size()]);
+    }
+
+    private void addCluesFromXml()  {
+        try {
+            XMLPullParserHandler pullParserHandler = new XMLPullParserHandler(this);
+
+            InputStream inputStream = getApplicationContext().getResources().openRawResource(R.raw.hunts);
+
+            boolean update = pullParserHandler.parse(inputStream);
+
+            if(update){
+
+                Clues db = new Clues(this);
+
+                List<Clue> clues = db.getClues();
+
+                for(Clue c: clues){
+                    Log.i(TAG, "db: " + c.toString());
+                }
+
+                Hunts hdb = new Hunts(this);
+                List<Hunt> hunts = hdb.getHunts();
+
+                for(Hunt h: hunts){
+                    Log.i(TAG, "db: " + h.toString());
+                }
+            }else{
+                Log.e(TAG, "Update Failed");
+            }
+
+        }catch (Exception e){
+            Log.e(TAG, "Cannot open file!!!!!!!");
+            e.printStackTrace();
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -23,6 +24,15 @@ public class StartHuntActivity extends Activity implements AdapterView.OnItemSel
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_hunt);
+
+        Button createHuntButton = (Button) findViewById(R.id.create_hunt_button);
+        createHuntButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ClueDisplayActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // set up the drop down list of the hunts to choose from
         Spinner spinner = (Spinner) findViewById(R.id.hunt_spinner);

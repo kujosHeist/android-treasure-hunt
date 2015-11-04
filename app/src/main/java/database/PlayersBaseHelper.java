@@ -23,8 +23,7 @@ public class PlayersBaseHelper extends SQLiteOpenHelper {
                 PlayersTable.Cols.UUID + "," +
                 PlayersTable.Cols.NAME + "," +
                 PlayersTable.Cols.TEAM + "," +
-                PlayersTable.Cols.HUNT +
-                ")"
+                PlayersTable.Cols.HUNT + ")"
         );
     }
 

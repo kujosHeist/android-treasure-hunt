@@ -12,7 +12,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_createHunt_text"
+        android:text="@string/create_hunt_button_text"
         android:id="@+id/button_id_start_hunt"
         android:onClick="startHunt"/>
 

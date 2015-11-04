@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<huntlist>
+    <hunt>
+        <name>UCD</name>
+        <hunt_location>53.3068311,-6.222511,16z</hunt_location>
+        <creator>Shane Carty</creator>
+
+        <clues>
+            <clue>
+                <text>Take a picture with a Swan</text>
+                <type>0</type>
+                <answer>null</answer>
+                <location>{set of loctions}</location>
+            </clue>
+
+            <clue>
+                <text>Who sponsored the main science Centre?</text>
+                <type>1</type>
+                <answer>Denis O Brien</answer>
+                <location>{set of locations}</location>
+            </clue>
+
+            <clue>
+                <text>On this Mound, a stone bird found, a place to lay an.. </text>
+                <type>0</type>
+                <answer>null</answer>
+                <location>{set of locations}</location>
+            </clue>
+
+            <clue>
+                <text>Full name of special research unit based in Comp Sci?</text>
+                <type>1</type>
+                <answer>Center for Cyber Crime Research</answer>
+                <location>{set of locations}</location>
+            </clue>
+
+            <clue>
+                <text>Find an check in from 3 bodies of water on Campus</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+        </clues>
+    </hunt>
+
+    <hunt>
+
+        <name>Trinity College Dublin</name>
+        <hunt_location>53.3437954,-6.2567603,17z</hunt_location>
+        <creator>Adam Moore</creator>
+
+        <clues>
+            <clue>
+                <text>trinity - clue 1</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+            <clue>
+                <text>trinity - clue 2</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+            <clue>
+                <text>trinity - clue 3</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+            <clue>
+                <text>trinity - clue 4</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+        </clues>
+
+    </hunt>
+
+    <hunt>
+
+        <name>Dublin City University</name>
+        <hunt_location>53.3858142,-6.2611337,17z</hunt_location>
+        <creator>Stephen Gallagher</creator>
+
+        <clues>
+            <clue>
+                <text>dcu - clue 1</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+            <clue>
+                <text>dcu - clue 2</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+            <clue>
+                <text>dcu - clue 3</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+            <clue>
+                <text>dcu - clue 4</text>
+                <type>2</type>
+                <answer>{3 different sets of gps locations}</answer>
+                <location>{set of locations}</location>
+            </clue>
+        </clues>
+
+    </hunt>
+</huntlist>
+
+
+
