@@ -12,30 +12,50 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class StartHuntActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class CreateHuntActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
+
+    private static final String TAG = "CreateHuntActivity";
     private String mHuntSelected;
 
+    private Button mCreateHuntButton;
 
-    private static final String DEFAULT_TEAM_NAME = "Alpha";
-
+    public static final String USER_ID = "CreateHuntActivity.USER_ID";
+    public static final String HUNT_NAME = "CreateHuntActivity.HUNT_NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_hunt);
+        setContentView(R.layout.activity_create_hunt);
 
-        Button createHuntButton = (Button) findViewById(R.id.create_hunt_button);
-        createHuntButton.setOnClickListener(new View.OnClickListener() {
+        mCreateHuntButton = (Button) findViewById(R.id.start_hunt_button);
+        mCreateHuntButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ClueDisplayActivity.class);
+
+                EditText userNameText = (EditText) findViewById(R.id.enter_user_name_edit);
+                String userName = userNameText.getText().toString();
+
+                EditText teamNameText = (EditText) findViewById(R.id.enter_team_name_edit);
+                String teamName = teamNameText.getText().toString();
+
+
+                // create new player
+                Player player = new Player(userName, mHuntSelected, teamName);
+                Players playersDb = new Players(v.getContext());
+                playersDb.addPlayer(player);
+
+                String playerId = player.getId().toString();
+
+                intent.putExtra(USER_ID, playerId);
+                intent.putExtra(HUNT_NAME, mHuntSelected);
                 startActivity(intent);
             }
         });
 
         // set up the drop down list of the hunts to choose from
-        Spinner spinner = (Spinner) findViewById(R.id.hunt_spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.select_hunt_spinner);
         spinner.setOnItemSelectedListener(this);
 
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.hunt_list, android.R.layout.simple_spinner_item);
@@ -64,23 +84,6 @@ public class StartHuntActivity extends Activity implements AdapterView.OnItemSel
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void startHunt(View view){
-        Intent intent = new Intent(this, TeamSelectActivity.class);
-
-        EditText editText = (EditText) findViewById(R.id.user_name);
-        String userName = editText.getText().toString();
-
-        Player player = new Player(userName, mHuntSelected, DEFAULT_TEAM_NAME);
-
-        Players playersDb = new Players(this);
-        playersDb.addPlayer(player);
-
-        String uuid = player.getId().toString();
-
-        intent.putExtra("playerId", uuid);
-        startActivity(intent);
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {

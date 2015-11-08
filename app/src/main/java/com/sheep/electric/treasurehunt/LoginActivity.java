@@ -6,19 +6,32 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
-public class CreateJoinHuntActivity extends Activity {
+public class LoginActivity extends Activity {
+
+    private Button mLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_join_hunt);
+        setContentView(R.layout.activity_login);
+
+
+        mLoginButton = (Button) findViewById(R.id.login_button);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_join_hunt, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -36,18 +49,5 @@ public class CreateJoinHuntActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void startHunt(View view){
-        Intent intent = new Intent(this, StartHuntActivity.class);
-        startActivity(intent);
-    }
-
-    public void joinHunt(View view){
-        Intent intent = new Intent(this, JoinHuntActivity.class);
-        startActivity(intent);
-    }
-
-
-
 
 }

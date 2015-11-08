@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <huntlist>
     <hunt>
-        <name>UCD</name>
+        <name>UCD Hunt</name>
         <hunt_location>53.3068311,-6.222511,16z</hunt_location>
         <creator>Shane Carty</creator>
 
@@ -45,7 +45,7 @@
 
     <hunt>
 
-        <name>Trinity College Dublin</name>
+        <name>Trinity Hunt</name>
         <hunt_location>53.3437954,-6.2567603,17z</hunt_location>
         <creator>Adam Moore</creator>
 
@@ -80,7 +80,7 @@
 
     <hunt>
 
-        <name>Dublin City University</name>
+        <name>DCU Hunt</name>
         <hunt_location>53.3858142,-6.2611337,17z</hunt_location>
         <creator>Stephen Gallagher</creator>
 

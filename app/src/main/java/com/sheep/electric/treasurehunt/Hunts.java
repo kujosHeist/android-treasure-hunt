@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,30 @@ public class Hunts {
 
     public Hunt getHunt(UUID uuid){
         HuntCursorWrapper cursor = queryHunts(
-                HuntsTable.Cols.NAME + " = ?",
+                HuntsTable.Cols.UUID + " = ?",
                 new String[]{uuid.toString()}
         );
+        try{
+            if(cursor.getCount() == 0){
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getHunt();
+        }finally {
+            cursor.close();
+        }
+    }
+
+    public Hunt getHunt(String huntName){
+        Log.d("Hunts", "Looking for hunt: " + huntName);
+        HuntCursorWrapper cursor = queryHunts(
+                HuntsTable.Cols.NAME + " = ?",
+                new String[]{huntName}
+        );
+
+
+
         try{
             if(cursor.getCount() == 0){
                 return null;

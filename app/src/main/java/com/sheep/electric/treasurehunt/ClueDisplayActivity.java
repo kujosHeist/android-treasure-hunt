@@ -3,8 +3,6 @@ package com.sheep.electric.treasurehunt;
 
 import android.content.Intent;
 
-import android.content.res.XmlResourceParser;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -34,27 +32,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import database.CluesBaseHelper;
+import java.util.UUID;
 
 public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static final String TAG = "ClueDisplayActivity";
 
-    private Clue[] mClueBank;
+    private ArrayList<Clue> mClueBank;
     private int mCurrentClueIndex = 0;
 
     private ImageButton mArrowLeftButton;
@@ -65,7 +55,9 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private Button mSubmitLocationButton;
 
     private Button mSavePicture;
-    private Button mSubmitAnswer;
+    private Button mSubmitAnswerButton;
+
+    private Answers mClueAnswers;
 
 
     @Override
@@ -73,24 +65,62 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
 
-        generateClues();
+        mClueAnswers = new Answers();
 
         mClueTextView = (TextView) findViewById(R.id.clue_text);
-        mClueAnswer = (EditText) findViewById(R.id.clue_answer);
+
+        mClueAnswer = (EditText) findViewById(R.id.clue_answer_edit_text);
+
         mTakePhotoButton = (Button) findViewById(R.id.take_photo_button);
         mSubmitLocationButton = (Button) findViewById(R.id.submit_location_button);
 
-        updateClue();
 
         mArrowLeftButton = (ImageButton) findViewById(R.id.arrow_left);
         mArrowRightButton = (ImageButton) findViewById(R.id.arrow_right);
 
+        mSubmitAnswerButton = (Button) findViewById(R.id.submit_answer_button);
+
+        mSubmitAnswerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Clue clue = mClueBank.get(mCurrentClueIndex);
+
+                switch(clue.getClueType()) {
+                    case Clue.TEXT:
+                        EditText clueAnswerEditText = (EditText) findViewById(R.id.clue_answer_edit_text);
+                        String clueAnswer = clueAnswerEditText.getText().toString();
+                        mClueAnswers.submitClueAnswer(clue.getId(), clueAnswer);
+                        mClueBank.remove(mCurrentClueIndex);
+                        break;
+
+                    case Clue.PICTURE:
+                        break;
+
+                    case Clue.LOCATION:
+                        break;
+
+                        // nothing
+                }
+
+                if(mClueBank.size() > 0){
+                    mCurrentClueIndex = (mCurrentClueIndex - 1) % mClueBank.size();
+                    if(mCurrentClueIndex < 0){
+                        mCurrentClueIndex += mClueBank.size();
+                    }
+                    updateClue();
+                }else{
+                    //Intent intent = new Intent(this,SummaryActivity.class);
+
+                }
+            }
+        });
+
         mArrowLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentClueIndex = (mCurrentClueIndex - 1) % mClueBank.length;
+                mCurrentClueIndex = (mCurrentClueIndex - 1) % mClueBank.size();
                 if(mCurrentClueIndex < 0){
-                    mCurrentClueIndex += mClueBank.length;
+                    mCurrentClueIndex += mClueBank.size();
                 }
                 updateClue();
             }
@@ -99,91 +129,17 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         mArrowRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentClueIndex = (mCurrentClueIndex + 1) % mClueBank.length;
+                mCurrentClueIndex = (mCurrentClueIndex + 1) % mClueBank.size();
                 updateClue();
             }
         });
+
+        populateClueBank();
+        updateClue();
+
         // if you want to load map from fragment which is already defined in the layout
         // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // mapFragment.getMapAsync(this);
-    }
-
-    // temporary measure, will be declared in a db eventually
-    public void generateClues(){
-        Clues cluesDb = new Clues(this);
-
-        if(cluesDb.getClues().size() == 0){
-            Log.d(TAG, "Clue db is empty, adding clues from hunts.xml");
-            addCluesFromXml();
-        }
-
-        Clues cluesDbase = new Clues(this);
-
-        ArrayList<Clue> clueList = (ArrayList<Clue>) cluesDbase.getClues();
-
-        mClueBank = clueList.toArray(new Clue[clueList.size()]);
-    }
-
-    private void addCluesFromXml()  {
-        try {
-            XMLPullParserHandler pullParserHandler = new XMLPullParserHandler(this);
-
-            InputStream inputStream = getApplicationContext().getResources().openRawResource(R.raw.hunts);
-
-            boolean update = pullParserHandler.parse(inputStream);
-
-            if(update){
-
-                Clues db = new Clues(this);
-
-                List<Clue> clues = db.getClues();
-
-                for(Clue c: clues){
-                    Log.i(TAG, "db: " + c.toString());
-                }
-
-                Hunts hdb = new Hunts(this);
-                List<Hunt> hunts = hdb.getHunts();
-
-                for(Hunt h: hunts){
-                    Log.i(TAG, "db: " + h.toString());
-                }
-            }else{
-                Log.e(TAG, "Update Failed");
-            }
-
-        }catch (Exception e){
-            Log.e(TAG, "Cannot open file!!!!!!!");
-            e.printStackTrace();
-        }
-    }
-
-    public void updateClue(){
-        Clue clue = mClueBank[mCurrentClueIndex];
-        mClueTextView.setText(clue.getClueText());
-
-        switch(clue.getClueType()) {
-            case Clue.TEXT:
-                mClueAnswer.setVisibility(EditText.VISIBLE);
-
-                mTakePhotoButton.setVisibility(Button.GONE);
-                mSubmitLocationButton.setVisibility(Button.GONE);
-
-                break;
-            case Clue.PICTURE:
-                mTakePhotoButton.setVisibility(Button.VISIBLE);
-
-                mClueAnswer.setVisibility(EditText.GONE);
-                mSubmitLocationButton.setVisibility(Button.GONE);
-                break;
-
-            case Clue.LOCATION:
-                mSubmitLocationButton.setVisibility(Button.VISIBLE);
-
-                mClueAnswer.setVisibility(EditText.GONE);
-                mTakePhotoButton.setVisibility(Button.GONE);
-
-        }
     }
 
     @Override
@@ -206,6 +162,83 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void populateClueBank(){
+        Clues cluesDb = new Clues(this);
+
+        cluesDb.getClues();
+
+        if(cluesDb.getClues().size() == 0) {
+            Log.d(TAG, "Clue db is empty, adding clues from hunts.xml");
+            addCluesFromXml();
+            cluesDb = new Clues(this);  // get new reference to the clue db
+        }
+
+        Intent intent = getIntent();
+        intent.getStringExtra(CreateHuntActivity.USER_ID);
+
+        String huntName = intent.getStringExtra(CreateHuntActivity.HUNT_NAME);
+
+        Hunts huntsDb = new Hunts(this);
+        UUID huntId = huntsDb.getHunt(huntName).getId();
+
+        mClueBank = (ArrayList<Clue>) cluesDb.getClues(huntId);
+    }
+
+    private void addCluesFromXml()  {
+        try {
+            XMLPullParserHandler pullParserHandler = new XMLPullParserHandler(this);
+            InputStream inputStream = getApplicationContext().getResources().openRawResource(R.raw.hunts);
+            boolean update = pullParserHandler.parse(inputStream);
+
+            if(update){
+                Clues db = new Clues(this);
+                List<Clue> clues = db.getClues();
+                for(Clue c: clues){
+                    Log.i(TAG, "db: " + c.toString());
+                }
+
+                Hunts hdb = new Hunts(this);
+                List<Hunt> hunts = hdb.getHunts();
+
+                for(Hunt h: hunts){
+                    Log.i(TAG, "db: " + h.toString());
+                }
+            }else{
+                Log.e(TAG, "Update Failed");
+            }
+        }catch (Exception e){
+            Log.e(TAG, "Cannot open file!!!!!!!");
+            e.printStackTrace();
+        }
+    }
+
+    public void updateClue(){
+        Clue clue = mClueBank.get(mCurrentClueIndex);
+        mClueTextView.setText(clue.getClueText());
+
+        switch(clue.getClueType()) {
+            case Clue.TEXT:
+                mClueAnswer.setVisibility(EditText.VISIBLE);
+
+                mTakePhotoButton.setVisibility(Button.GONE);
+                mSubmitLocationButton.setVisibility(Button.GONE);
+
+                break;
+            case Clue.PICTURE:
+                mTakePhotoButton.setVisibility(Button.VISIBLE);
+
+                mClueAnswer.setVisibility(EditText.GONE);
+                mSubmitLocationButton.setVisibility(Button.GONE);
+                break;
+
+            case Clue.LOCATION:
+                mSubmitLocationButton.setVisibility(Button.VISIBLE);
+
+                mClueAnswer.setVisibility(EditText.GONE);
+                mTakePhotoButton.setVisibility(Button.GONE);
+        }
     }
 
     // Camera code ******************************************************************************

@@ -2,15 +2,14 @@
     <string name="app_name">TreasureHunt</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="button_login_text">Login</string>
-    <string name="button_options_text">Options</string>
+
     <string name="title_activity_start_hunt">Start Hunt</string>
-    <string name="create_hunt_button_text">Start Hunt</string>
-    <string name="button_joinHunt_text">Join Hunt</string>
+
+
     <string name="title_activity_join_hunt">Join Hunt</string>
-    <string name="enter_your_name">Enter Your Name</string>
-    <string name="enter_hunt_name">Enter Hunt Name</string>
-    <string name="enter_hunt_location">Enter Hunt Location</string>
+    <string name="enter_user_name_text">Enter Your Name: </string>
+    <string name="enter_hunt_name">Enter Hunt Name: </string>
+    <string name="enter_hunt_location">Enter Hunt Location: </string>
 
     <string name="select_team">Select Team</string>
     <string name="team_options">Enter Team Details</string>
@@ -31,8 +30,18 @@
     <string name="title_activity_maps">Map</string>
     <string name="delete_image">Delete Image</string>
     <string name="save_image">Save Image</string>
-    <string name="enter_clue_answer">Enter Your Answer:</string>
+    <string name="enter_clue_answer_text">Enter Your Answer:</string>
     <string name="submit_location_button">Submit Location</string>
-    <string name="submit_answer">Submit Answer</string>
+    <string name="submit_answer_button">Submit Answer</string>
+    <string name="start_hunt_button">Start Hunt</string>
+    <string name="join_hunt_button">Join Hunt</string>
+    <string name="view_available_hunts_button">View Available Hunts</string>
+    <string name="create_new_hunt_button">Create New Hunt</string>
+    <string name="create_hunt_button">Create Hunt</string>
+    <string name="select_hunt_text">Select Hunt:</string>
+    <string name="login_button">Login</string>
+    <string name="enter_team_name_text">Enter Team Name:</string>
+    <string name="options_button">Options</string>
+    <string name="enter_team_name_edit">Enter Team Name:</string>
 
 </resources>

@@ -51,11 +51,17 @@
                 android:padding="20dp"/>
     </LinearLayout>
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/clue_answer"
-        android:text="@string/enter_clue_answer"
+        android:visibility="gone"
+        android:id="@+id/enter_clue_answer_text"
+        android:text="@string/enter_clue_answer_text"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/clue_answer_edit_text"
         android:visibility="gone"
         android:padding="20dp"/>
 
@@ -70,8 +76,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit_answer"
-        android:id="@+id/submit_answer"
+        android:text="@string/submit_answer_button"
+        android:id="@+id/submit_answer_button"
         android:padding="20dp"/>
 
     <LinearLayout

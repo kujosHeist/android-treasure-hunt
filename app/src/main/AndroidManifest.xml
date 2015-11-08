@@ -22,7 +22,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +31,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateJoinHuntActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_start_hunt" >
         </activity>
         <activity
-            android:name=".StartHuntActivity"
+            android:name=".CreateHuntActivity"
             android:label="@string/title_activity_start_hunt" >
         </activity>
         <activity
