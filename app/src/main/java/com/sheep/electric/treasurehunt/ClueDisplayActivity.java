@@ -15,7 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+
 import android.widget.Button;
 
 import android.widget.EditText;
@@ -58,12 +58,28 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private EditText mAnswerText;
     private Button mSubmitLocationButton;
 
-    private Button mSavePicture;
+    private TextView mEnterAnswerTextView;
+
+
+    private ImageView mImageView;
+
+    private Button mDeletePicture;
+
     private Button mSubmitAnswerButton;
+    private Uri mFileUri;
 
     private Answers mClueAnswers;
     private UUID mHuntId;
     private UUID mPlayerId;
+
+    // Camera code ******************************************************************************
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+
+
 
 
     @Override
@@ -73,12 +89,17 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
         mClueTextView = (TextView) findViewById(R.id.clue_text);
         mAnswerText = (EditText) findViewById(R.id.clue_answer_edit_text);
+        mEnterAnswerTextView = (TextView) findViewById(R.id.enter_answer_text);
+
 
         mTakePhotoButton = (Button) findViewById(R.id.take_photo_button);
         mSubmitLocationButton = (Button) findViewById(R.id.submit_location_button);
         mArrowLeftButton = (ImageButton) findViewById(R.id.arrow_left);
         mArrowRightButton = (ImageButton) findViewById(R.id.arrow_right);
         mSubmitAnswerButton = (Button) findViewById(R.id.submit_answer_button);
+
+        mDeletePicture = (Button) findViewById(R.id.delete_image);
+        mImageView = (ImageView) findViewById(R.id.captured_picture);
 
         Intent intent = getIntent();
         String playerIdString = intent.getStringExtra(CreateHuntActivity.PLAYER_ID);
@@ -98,7 +119,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
                 Answer answer = new Answer(clue.getId(), mPlayerId, mHuntId);  // create new answer ready to be stored in db
 
-                switch(clue.getClueType()) {
+                switch (clue.getClueType()) {
                     case Clue.TEXT:
                         EditText clueAnswerEditText = (EditText) findViewById(R.id.clue_answer_edit_text);
 
@@ -109,34 +130,30 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                         answer.setPictureUri(null);
                         answer.setLocation(null);
 
-
                         mClueBank.remove(mCurrentClueIndex);
                         break;
 
                     case Clue.PICTURE:
-                        if(fileUri != null){
+                        if (mFileUri != null) {
 
-                            answer.setPictureUri(fileUri);
+                            answer.setPictureUri(mFileUri);
                             answer.setText(null);
                             answer.setLocation(null);
 
-
-                            mClueBank.remove(mCurrentClueIndex);
-                            break;
-                        }else{
-                            //Log.d(TAG, "Must take photo first");
-
-                            //Toast.makeText(ClueDisplayActivity.this, "Must take photo first", Toast.LENGTH_SHORT).show();
-
-                            answer.setPictureUri(null);
-                            answer.setText(null);
-                            answer.setLocation(null);
                             mClueBank.remove(mCurrentClueIndex);
 
-                            // return;
+                            mFileUri = null;
+                            mImageView.setImageBitmap(null);
+                            mImageView.setVisibility(View.GONE);
+                            mDeletePicture.setVisibility(View.GONE);
                             break;
 
+                        } else {
+                            Log.d(TAG, "Must take photo first");
+                            Toast.makeText(ClueDisplayActivity.this, "Must take photo first", Toast.LENGTH_SHORT).show();
+                            return;
                         }
+
 
                     case Clue.LOCATION:
                         String clueLocationAnswer = "{Test Location}";
@@ -151,12 +168,12 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
                 mClueAnswers.addAnswer(answer);  // adds answer to db
 
-                if(mClueBank.size() > 0){
-                    if(mCurrentClueIndex == mClueBank.size()){
+                if (mClueBank.size() > 0) {
+                    if (mCurrentClueIndex == mClueBank.size()) {
                         mCurrentClueIndex -= 1;
                     }
                     updateClue();
-                }else{
+                } else {
                     Intent intent = new Intent(v.getContext(), SummaryActivity.class);
                     intent.putExtra(PLAYER_ID, mPlayerId.toString());
                     intent.putExtra(HUNT_ID, mHuntId.toString());
@@ -175,6 +192,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 if (mCurrentClueIndex < 0) {
                     mCurrentClueIndex += mClueBank.size();
                 }
+                deleteImage();
                 updateClue();
             }
         });
@@ -183,16 +201,66 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 mCurrentClueIndex = (mCurrentClueIndex + 1) % mClueBank.size();
+                deleteImage();
                 updateClue();
             }
         });
 
+        mTakePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create Intent to take a picture and return control to the calling application
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                mFileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri); // set the image file name
 
+                // start the image capture Intent
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
+        mDeletePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteImage();
+                Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
+            }
+        });
 
         // if you want to load map from fragment which is already defined in the layout
         // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // mapFragment.getMapAsync(this);
     }
+
+    public void deleteImage(){
+        if(mFileUri != null){
+            mDeletePicture.setVisibility(View.GONE);
+            File file = new File(mFileUri.toString());
+            file.delete();
+            mFileUri = null;
+            mImageView.setImageBitmap(null);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                mImageView.setVisibility(View.VISIBLE);
+                mDeletePicture.setVisibility(View.VISIBLE);
+                // Image captured and saved to mFileUri specified in the Intent
+                // Toast.makeText(this, "Image saved to:\n" + mFileUri.toString(), Toast.LENGTH_LONG).show();
+                Bitmap image = BitmapFactory.decodeFile(mFileUri.getPath());
+                mImageView.setImageBitmap(image);
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "User cancelled the image capture");
+
+            } else {
+                Log.d(TAG, "Image capture failed");
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -276,6 +344,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
         switch(clue.getClueType()) {
             case Clue.TEXT:
+                mEnterAnswerTextView.setVisibility(View.VISIBLE);
                 mAnswerText.setVisibility(EditText.VISIBLE);
 
                 mTakePhotoButton.setVisibility(Button.GONE);
@@ -283,8 +352,12 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
                 break;
             case Clue.PICTURE:
+
                 mTakePhotoButton.setVisibility(Button.VISIBLE);
 
+
+
+                mEnterAnswerTextView.setVisibility(View.GONE);
                 mAnswerText.setVisibility(EditText.GONE);
                 mSubmitLocationButton.setVisibility(Button.GONE);
                 break;
@@ -292,88 +365,25 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             case Clue.LOCATION:
                 mSubmitLocationButton.setVisibility(Button.VISIBLE);
 
+                mEnterAnswerTextView.setVisibility(View.GONE);
                 mAnswerText.setVisibility(EditText.GONE);
                 mTakePhotoButton.setVisibility(Button.GONE);
         }
     }
 
-    // Camera code ******************************************************************************
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
 
-    private Uri fileUri;
-
-    public void takePhoto(View view){
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
-        // start the image capture Intent
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Image saved to:\n" + fileUri.toString(), Toast.LENGTH_LONG).show();
-
-                Bitmap image = BitmapFactory.decodeFile(fileUri.getPath());
-                final ImageView imageView = (ImageView) findViewById(R.id.captured_picture);
-                imageView.setImageBitmap(image);
-
-                galleryAddPic();   // not working
-
-                ViewGroup layout = (ViewGroup) findViewById(R.id.button_layout);
-                Button bt = new Button(this);
-                bt.setText("Save");
-
-                bt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "Image Saved", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                Button bt2 = new Button(this);
-                bt2.setText("Delete");
-
-                bt2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        imageView.setImageBitmap(null);
-                        File file = new File(fileUri.toString());
-                        file.delete();
-
-                        Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                layout.addView(bt);
-                layout.addView(bt2);
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the image capture
-            } else {
-                // Image capture failed, advise user
-            }
-        }
-    }
-
+    /*
     // currently not working, not saving to the phones gallery
     private void galleryAddPic() {
 
-        File file = new File(fileUri.getPath());
+        File file = new File(mFileUri.getPath());
         Uri content = Uri.fromFile(file);
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, content);
 
         this.sendBroadcast(mediaScanIntent);
     }
+    */
 
     /** Create a file Uri for saving an image or video */
     private static Uri getOutputMediaFileUri(int type){

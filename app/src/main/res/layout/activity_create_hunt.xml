@@ -5,13 +5,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     tools:context="com.sheep.electric.treasurehunt.CreateHuntActivity">
 
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/enter_user_name_text"
-        android:padding="20dp"/>
+        android:padding="10dp"/>
 
     <EditText android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -22,13 +22,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/enter_team_name_text"
-        android:padding="20dp"/>
+        android:padding="10dp"/>
 
     <EditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/enter_team_name_edit"
-        android:padding="20dp"
+        android:padding="10dp"
         android:text="@string/test_team_name"/>
 
     <TextView
@@ -36,13 +36,13 @@
         android:layout_height="wrap_content"
         android:text="@string/select_hunt_text"
         android:id="@+id/select_hunt_text"
-        android:padding="20dp"/>
+        android:padding="10dp"/>
 
     <Spinner
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/select_hunt_spinner"
-        android:padding="20dp"/>
+        android:padding="10dp"/>
 
     <Button
         android:layout_width="wrap_content"
