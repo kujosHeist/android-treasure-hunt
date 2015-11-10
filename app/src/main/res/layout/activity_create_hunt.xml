@@ -15,7 +15,8 @@
 
     <EditText android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:id="@+id/enter_user_name_edit" android:padding="20dp"/>
+        android:id="@+id/enter_user_name_edit" android:padding="20dp"
+        android:text="@string/test_player_name"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +28,8 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/enter_team_name_edit"
-        android:padding="20dp"/>
+        android:padding="20dp"
+        android:text="@string/test_team_name"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -43,5 +43,13 @@
     <string name="enter_team_name_text">Enter Team Name:</string>
     <string name="options_button">Options</string>
     <string name="enter_team_name_edit">Enter Team Name:</string>
+    <string name="title_activity_summary">SummaryActivity</string>
+    <string name="summary_text">Summary</string>
+    <string name="player_text">Player: </string>
+    <string name="hunt_text">Hunt: </string>
+    <string name="team_text">Team: </string>
+    <string name="answers">Answers</string>
+    <string name="test_player_name">Elliot</string>
+    <string name="test_team_name">fsociety</string>
 
 </resources>

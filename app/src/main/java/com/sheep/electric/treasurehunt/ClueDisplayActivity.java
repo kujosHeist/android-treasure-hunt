@@ -32,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
 import java.io.File;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -44,6 +45,9 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     public static final String TAG = "ClueDisplayActivity";
 
+    public static final String PLAYER_ID = "ClueDisplayActivity.PLAYER_ID";
+    public static final String HUNT_ID = "ClueDisplayActivity.HUNT_ID";
+
     private ArrayList<Clue> mClueBank;
     private int mCurrentClueIndex = 0;
 
@@ -51,13 +55,15 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private ImageButton mArrowRightButton;
     private Button mTakePhotoButton;
     private TextView mClueTextView;
-    private EditText mClueAnswer;
+    private EditText mAnswerText;
     private Button mSubmitLocationButton;
 
     private Button mSavePicture;
     private Button mSubmitAnswerButton;
 
     private Answers mClueAnswers;
+    private UUID mHuntId;
+    private UUID mPlayerId;
 
 
     @Override
@@ -65,52 +71,99 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
 
-        mClueAnswers = new Answers();
-
         mClueTextView = (TextView) findViewById(R.id.clue_text);
-
-        mClueAnswer = (EditText) findViewById(R.id.clue_answer_edit_text);
+        mAnswerText = (EditText) findViewById(R.id.clue_answer_edit_text);
 
         mTakePhotoButton = (Button) findViewById(R.id.take_photo_button);
         mSubmitLocationButton = (Button) findViewById(R.id.submit_location_button);
-
-
         mArrowLeftButton = (ImageButton) findViewById(R.id.arrow_left);
         mArrowRightButton = (ImageButton) findViewById(R.id.arrow_right);
-
         mSubmitAnswerButton = (Button) findViewById(R.id.submit_answer_button);
+
+        Intent intent = getIntent();
+        String playerIdString = intent.getStringExtra(CreateHuntActivity.PLAYER_ID);
+        String huntName = intent.getStringExtra(CreateHuntActivity.HUNT_NAME);
+
+        mPlayerId = UUID.fromString(playerIdString);
+        mHuntId = populateClueBank(huntName);   // creates hunt if it doesn't already exist, returns hunt id
+
+        mClueAnswers = new Answers(this);
+
+        updateClue();
 
         mSubmitAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Clue clue = mClueBank.get(mCurrentClueIndex);
 
+                Answer answer = new Answer(clue.getId(), mPlayerId, mHuntId);  // create new answer ready to be stored in db
+
                 switch(clue.getClueType()) {
                     case Clue.TEXT:
                         EditText clueAnswerEditText = (EditText) findViewById(R.id.clue_answer_edit_text);
+
                         String clueAnswer = clueAnswerEditText.getText().toString();
-                        mClueAnswers.submitClueAnswer(clue.getId(), clueAnswer);
+                        clueAnswerEditText.setText("");
+
+                        answer.setText(clueAnswer);
+                        answer.setPictureUri(null);
+                        answer.setLocation(null);
+
+
                         mClueBank.remove(mCurrentClueIndex);
                         break;
 
                     case Clue.PICTURE:
-                        break;
+                        if(fileUri != null){
+
+                            answer.setPictureUri(fileUri);
+                            answer.setText(null);
+                            answer.setLocation(null);
+
+
+                            mClueBank.remove(mCurrentClueIndex);
+                            break;
+                        }else{
+                            //Log.d(TAG, "Must take photo first");
+
+                            //Toast.makeText(ClueDisplayActivity.this, "Must take photo first", Toast.LENGTH_SHORT).show();
+
+                            answer.setPictureUri(null);
+                            answer.setText(null);
+                            answer.setLocation(null);
+                            mClueBank.remove(mCurrentClueIndex);
+
+                            // return;
+                            break;
+
+                        }
 
                     case Clue.LOCATION:
-                        break;
+                        String clueLocationAnswer = "{Test Location}";
 
-                        // nothing
+                        answer.setLocation(clueLocationAnswer);
+                        answer.setText(null);
+                        answer.setPictureUri(null);
+
+                        mClueBank.remove(mCurrentClueIndex);
+                        break;
                 }
 
+                mClueAnswers.addAnswer(answer);  // adds answer to db
+
                 if(mClueBank.size() > 0){
-                    mCurrentClueIndex = (mCurrentClueIndex - 1) % mClueBank.size();
-                    if(mCurrentClueIndex < 0){
-                        mCurrentClueIndex += mClueBank.size();
+                    if(mCurrentClueIndex == mClueBank.size()){
+                        mCurrentClueIndex -= 1;
                     }
                     updateClue();
                 }else{
-                    //Intent intent = new Intent(this,SummaryActivity.class);
+                    Intent intent = new Intent(v.getContext(), SummaryActivity.class);
+                    intent.putExtra(PLAYER_ID, mPlayerId.toString());
+                    intent.putExtra(HUNT_ID, mHuntId.toString());
 
+                    Log.d(TAG, "Putting extra playerId: " + mPlayerId);
+                    Log.d(TAG, "Putting extra huntId: " + mHuntId);
+                    startActivity(intent);
                 }
             }
         });
@@ -119,7 +172,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 mCurrentClueIndex = (mCurrentClueIndex - 1) % mClueBank.size();
-                if(mCurrentClueIndex < 0){
+                if (mCurrentClueIndex < 0) {
                     mCurrentClueIndex += mClueBank.size();
                 }
                 updateClue();
@@ -134,8 +187,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             }
         });
 
-        populateClueBank();
-        updateClue();
+
 
         // if you want to load map from fragment which is already defined in the layout
         // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -164,7 +216,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         return super.onOptionsItemSelected(item);
     }
 
-    public void populateClueBank(){
+    public UUID populateClueBank(String huntName){
         Clues cluesDb = new Clues(this);
 
         cluesDb.getClues();
@@ -176,14 +228,17 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         }
 
         Intent intent = getIntent();
-        intent.getStringExtra(CreateHuntActivity.USER_ID);
+        intent.getStringExtra(CreateHuntActivity.PLAYER_ID);
 
-        String huntName = intent.getStringExtra(CreateHuntActivity.HUNT_NAME);
+
 
         Hunts huntsDb = new Hunts(this);
         UUID huntId = huntsDb.getHunt(huntName).getId();
 
         mClueBank = (ArrayList<Clue>) cluesDb.getClues(huntId);
+
+        Log.d(TAG, "Returning hunt id: " + huntId);
+        return huntId;
     }
 
     private void addCluesFromXml()  {
@@ -216,11 +271,12 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     public void updateClue(){
         Clue clue = mClueBank.get(mCurrentClueIndex);
+
         mClueTextView.setText(clue.getClueText());
 
         switch(clue.getClueType()) {
             case Clue.TEXT:
-                mClueAnswer.setVisibility(EditText.VISIBLE);
+                mAnswerText.setVisibility(EditText.VISIBLE);
 
                 mTakePhotoButton.setVisibility(Button.GONE);
                 mSubmitLocationButton.setVisibility(Button.GONE);
@@ -229,14 +285,14 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             case Clue.PICTURE:
                 mTakePhotoButton.setVisibility(Button.VISIBLE);
 
-                mClueAnswer.setVisibility(EditText.GONE);
+                mAnswerText.setVisibility(EditText.GONE);
                 mSubmitLocationButton.setVisibility(Button.GONE);
                 break;
 
             case Clue.LOCATION:
                 mSubmitLocationButton.setVisibility(Button.VISIBLE);
 
-                mClueAnswer.setVisibility(EditText.GONE);
+                mAnswerText.setVisibility(EditText.GONE);
                 mTakePhotoButton.setVisibility(Button.GONE);
         }
     }
@@ -265,8 +321,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Image saved to:\n" +
-                  fileUri.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Image saved to:\n" + fileUri.toString(), Toast.LENGTH_LONG).show();
 
                 Bitmap image = BitmapFactory.decodeFile(fileUri.getPath());
                 final ImageView imageView = (ImageView) findViewById(R.id.captured_picture);
@@ -294,6 +349,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                         imageView.setImageBitmap(null);
                         File file = new File(fileUri.toString());
                         file.delete();
+
                         Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -362,7 +418,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     android.support.v4.app.FragmentManager fm;
     android.support.v4.app.FragmentTransaction ft;
 
-    // opens up seperate activity and displays it
+    // opens up separate activity and displays it
     public void openMap(View view){
 
         if(mapsActivity == null){

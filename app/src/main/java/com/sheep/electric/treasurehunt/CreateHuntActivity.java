@@ -3,6 +3,7 @@ package com.sheep.electric.treasurehunt;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,7 @@ public class CreateHuntActivity extends Activity implements AdapterView.OnItemSe
 
     private Button mCreateHuntButton;
 
-    public static final String USER_ID = "CreateHuntActivity.USER_ID";
+    public static final String PLAYER_ID = "CreateHuntActivity.PLAYER_ID";
     public static final String HUNT_NAME = "CreateHuntActivity.HUNT_NAME";
 
     @Override
@@ -48,8 +49,11 @@ public class CreateHuntActivity extends Activity implements AdapterView.OnItemSe
 
                 String playerId = player.getId().toString();
 
-                intent.putExtra(USER_ID, playerId);
+                intent.putExtra(PLAYER_ID, playerId);
                 intent.putExtra(HUNT_NAME, mHuntSelected);
+
+                Log.d(TAG, "Player ID: " + playerId);
+                Log.d(TAG, "Hunt Name: " + mHuntSelected);
                 startActivity(intent);
             }
         });
