@@ -4,6 +4,7 @@ package com.sheep.electric.treasurehunt;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -32,11 +33,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.File;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -85,6 +89,11 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private LinearLayout mLocationLayout;
     private LinearLayout mAnswerTextLayout;
 
+    public static final LatLng UCD_LAT_LONG = new LatLng(53.3069227,-6.2234008);
+    public static final int MAP_ZOOM_LEVEL = 15;
+
+    private Clues mCluesDb;
+
 
 
     // Camera code ******************************************************************************
@@ -93,6 +102,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+
+
 
     GoogleApiClient mGoogleApiClient;
 
@@ -105,6 +116,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
+
+        mCluesDb = new Clues(this);
 
         mLocationLayout = (LinearLayout) findViewById(R.id.location_layout);
         mAnswerTextLayout = (LinearLayout) findViewById(R.id.answer_text_layout);
@@ -193,7 +206,6 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
                             return;
                         }
-
 
 
                     case Clue.PICTURE:
@@ -397,14 +409,14 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     }
 
     public UUID populateClueBank(String huntName){
-        Clues cluesDb = new Clues(this);
 
-        cluesDb.getClues();
 
-        if(cluesDb.getClues().size() == 0) {
+
+
+        if(mCluesDb.getClues().size() == 0) {
             Log.d(TAG, "Clue db is empty, adding clues from hunts.xml");
             addCluesFromXml();
-            cluesDb = new Clues(this);  // get new reference to the clue db
+            mCluesDb = new Clues(this);  // get new reference to the clue db
         }
 
         Intent intent = getIntent();
@@ -413,7 +425,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         Hunts huntsDb = new Hunts(this);
         UUID huntId = huntsDb.getHunt(huntName).getId();
 
-        mClueBank = (ArrayList<Clue>) cluesDb.getClues(huntId);
+        mClueBank = (ArrayList<Clue>) mCluesDb.getClues(huntId);
 
         Log.d(TAG, "Returning hunt id: " + huntId);
         return huntId;
@@ -426,8 +438,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             boolean update = pullParserHandler.parse(inputStream);
 
             if(update){
-                Clues db = new Clues(this);
-                List<Clue> clues = db.getClues();
+
+                List<Clue> clues = mCluesDb.getClues();
                 for(Clue c: clues){
                     Log.i(TAG, "db: " + c.toString());
                 }
@@ -540,16 +552,64 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng ucd = new LatLng(53.307262,-6.219077);
-        LatLng latLng = new LatLng(53.307262,-6.219077);
-        Log.d(TAG,"LatLng: " + latLng.toString());
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucd, 15));
-        googleMap.addMarker(new MarkerOptions().title("Sydney").snippet(("Most people in Oz")).position(ucd));
+        try{
+
+            Clue currentClue = mClueBank.get(mCurrentClueIndex);
+
+            //String clueLocations = currentClue.getClueLocation();  // returns string of comma seperated lat/longs
+
+            String clueLocations = "53.307730,-6.222316,53.308409,-6.222694,53.307525,-6.223118,53.307018,-6.221982,53.307967,-6.221377";
+            String[] locs = clueLocations.split(",");
+            ArrayList<String> locationArray = new ArrayList<>();
+
+            locationArray.addAll(Arrays.asList(locs));
+
+           // ArrayList<String> locationArray = (ArrayList<String>) Arrays.asList(clueLocations.split(","));
+
+            if(locationArray.size() % 2 != 0 || locationArray.size() == 0){
+                throw new Exception("Error parsing clue location");
+            }
+
+            LatLng centralCluePoint = new LatLng(Double.parseDouble(locationArray.remove(0)), Double.parseDouble(locationArray.remove(0)));
+            Log.d(TAG, centralCluePoint.toString());
+
+
+
+            int numPoints = locationArray.size()/2;
+
+            ArrayList<LatLng> latLongs = new ArrayList<>();
+
+            for(int i = 0, j = 0, k = 1; i < numPoints; i++, j+=2, k+=2){
+                latLongs.add(new LatLng(Double.parseDouble(locationArray.get(j)), Double.parseDouble(locationArray.get(k))));
+                Log.d(TAG, latLongs.get(i).toString());
+            }
+
+            googleMap.setMyLocationEnabled(true);
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centralCluePoint, MAP_ZOOM_LEVEL));
+            Polygon polygon = googleMap.addPolygon(new PolygonOptions()
+                    .addAll(latLongs)
+                    .strokeColor(Color.RED));
+            googleMap.addMarker(new MarkerOptions().title("Hint").snippet(("Here be swans")).position(centralCluePoint));
+
+        }catch(Exception e){
+            e.printStackTrace();
+
+            // just show standard map of ucd
+            googleMap.setMyLocationEnabled(true);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UCD_LAT_LONG, MAP_ZOOM_LEVEL));
+
+
+        }
+
     }
+
+
+
+
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Log.d(TAG, "Connection failed");
     }
 }
