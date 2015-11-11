@@ -1,10 +1,15 @@
 package com.sheep.electric.treasurehunt;
 
 
+import android.Manifest;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +30,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,7 +49,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = "ClueDisplayActivity";
 
@@ -72,6 +81,41 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private UUID mHuntId;
     private UUID mPlayerId;
 
+    private Location mLocation;
+
+    private LocationManager mLocationManager;
+
+    private TextView mLatitudeTextView;
+    private TextView mLongitudeTextView;
+
+
+/*
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            mLocation = location;
+            Log.d(TAG, "Location is: " + mLocation.toString());
+            Toast.makeText(getApplicationContext(), "Location is: " + mLocation.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    */
+
     // Camera code ******************************************************************************
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
@@ -79,13 +123,68 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
+    GoogleApiClient mGoogleApiClient;
 
+    Location mLastLocation;
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
 
+    @Override
+    public void onConnected(Bundle connectionHint){
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(mLastLocation != null){
+            mLatitudeTextView.setText("Latitude: " + mLastLocation.getLatitude());
+            mLongitudeTextView.setText("Lonitude: " + mLastLocation.getLongitude());
+        }else{
+            Toast.makeText(this, "Can't get location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
+
+        mLatitudeTextView = (TextView) findViewById(R.id.latitude_text);
+        mLatitudeTextView = (TextView) findViewById(R.id.longitude_text);
+
+        buildGoogleApiClient();
+
+
+
+        /*
+
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        /*
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return;
+        }
+        */ /*
+        try{
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, mLocationListener);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        */
 
         mClueTextView = (TextView) findViewById(R.id.clue_text);
         mAnswerText = (EditText) findViewById(R.id.clue_answer_edit_text);
@@ -226,6 +325,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
             }
         });
+
+
 
         // if you want to load map from fragment which is already defined in the layout
         // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -371,20 +472,6 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
-
-
-    /*
-    // currently not working, not saving to the phones gallery
-    private void galleryAddPic() {
-
-        File file = new File(mFileUri.getPath());
-        Uri content = Uri.fromFile(file);
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, content);
-
-        this.sendBroadcast(mediaScanIntent);
-    }
-    */
-
     /** Create a file Uri for saving an image or video */
     private static Uri getOutputMediaFileUri(int type){
         return Uri.fromFile(getOutputMediaFile(type));
@@ -446,24 +533,22 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             ft.remove(mapsActivity);
             mapsActivity = null;
             ft.commit();
-            /*
-            //mapsActivity.getMapAsync(this);
-            fm = getSupportFragmentManager();
-            ft = fm.beginTransaction();
-            int fragId = fm.findFragmentByTag("tag").getId();
-
-            ft.replace(fragId,  blankFrameLayout);
-            System.out.println("Replacing with tag: " + fragId);
-            */
 
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(53.307262,-6.219077);
+        LatLng ucd = new LatLng(53.307262,-6.219077);
+        LatLng latLng = new LatLng(53.307262,-6.219077);
+        Log.d(TAG,"LatLng: " + latLng.toString());
         googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
-        googleMap.addMarker(new MarkerOptions().title("Sydney").snippet(("Most people in Oz")).position(sydney));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucd, 15));
+        googleMap.addMarker(new MarkerOptions().title("Sydney").snippet(("Most people in Oz")).position(ucd));
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }

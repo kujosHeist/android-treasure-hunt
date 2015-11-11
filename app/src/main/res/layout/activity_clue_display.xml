@@ -97,6 +97,18 @@
         android:visibility="gone"
         android:padding="20dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty"
+        android:id="@+id/latitude_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty"
+        android:id="@+id/longitude_text"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -51,5 +51,6 @@
     <string name="answers">Answers</string>
     <string name="test_player_name">Elliot</string>
     <string name="test_team_name">fsociety</string>
+    <string name="empty">null</string>
 
 </resources>
