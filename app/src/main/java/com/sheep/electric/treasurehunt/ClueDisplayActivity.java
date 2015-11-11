@@ -1,32 +1,25 @@
 package com.sheep.electric.treasurehunt;
 
 
-import android.Manifest;
 import android.content.Intent;
-
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.Button;
-
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +32,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 
 import java.io.File;
 import java.io.InputStream;
@@ -62,17 +54,19 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     private ImageButton mArrowLeftButton;
     private ImageButton mArrowRightButton;
-    private Button mTakePhotoButton;
+    private Button mTakeOrDeletePhotoButton;
     private TextView mClueTextView;
     private EditText mAnswerText;
-    private Button mSubmitLocationButton;
+    private Button mGetOrDeleteLocationButton;
+
+    private Button mShowOnMap;
 
     private TextView mEnterAnswerTextView;
 
 
     private ImageView mImageView;
 
-    private Button mDeletePicture;
+
 
     private Button mSubmitAnswerButton;
     private Uri mFileUri;
@@ -88,33 +82,10 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private TextView mLatitudeTextView;
     private TextView mLongitudeTextView;
 
+    private LinearLayout mLocationLayout;
+    private LinearLayout mAnswerTextLayout;
 
-/*
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            mLocation = location;
-            Log.d(TAG, "Location is: " + mLocation.toString());
-            Toast.makeText(getApplicationContext(), "Location is: " + mLocation.toString(), Toast.LENGTH_LONG).show();
-        }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };
-
-    */
 
     // Camera code ******************************************************************************
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -125,79 +96,38 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     GoogleApiClient mGoogleApiClient;
 
-    Location mLastLocation;
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
 
-    @Override
-    public void onConnected(Bundle connectionHint){
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if(mLastLocation != null){
-            mLatitudeTextView.setText("Latitude: " + mLastLocation.getLatitude());
-            mLongitudeTextView.setText("Lonitude: " + mLastLocation.getLongitude());
-        }else{
-            Toast.makeText(this, "Can't get location", Toast.LENGTH_SHORT).show();
-        }
-    }
 
-    @Override
-    public void onConnectionSuspended(int i) {
 
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
 
+        mLocationLayout = (LinearLayout) findViewById(R.id.location_layout);
+        mAnswerTextLayout = (LinearLayout) findViewById(R.id.answer_text_layout);
+
         mLatitudeTextView = (TextView) findViewById(R.id.latitude_text);
-        mLatitudeTextView = (TextView) findViewById(R.id.longitude_text);
+        mLongitudeTextView = (TextView) findViewById(R.id.longitude_text);
 
         buildGoogleApiClient();
 
-
-
-        /*
-
-        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        /*
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
-            return;
-        }
-        */ /*
-        try{
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, mLocationListener);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        */
+        mShowOnMap = (Button) findViewById(R.id.show_on_map_button);
 
         mClueTextView = (TextView) findViewById(R.id.clue_text);
         mAnswerText = (EditText) findViewById(R.id.clue_answer_edit_text);
         mEnterAnswerTextView = (TextView) findViewById(R.id.enter_answer_text);
 
 
-        mTakePhotoButton = (Button) findViewById(R.id.take_photo_button);
-        mSubmitLocationButton = (Button) findViewById(R.id.submit_location_button);
+        mTakeOrDeletePhotoButton = (Button) findViewById(R.id.take_picture_button);
+        mGetOrDeleteLocationButton = (Button) findViewById(R.id.get_location_button);
         mArrowLeftButton = (ImageButton) findViewById(R.id.arrow_left);
         mArrowRightButton = (ImageButton) findViewById(R.id.arrow_right);
         mSubmitAnswerButton = (Button) findViewById(R.id.submit_answer_button);
 
-        mDeletePicture = (Button) findViewById(R.id.delete_image);
+
         mImageView = (ImageView) findViewById(R.id.captured_picture);
 
         Intent intent = getIntent();
@@ -211,6 +141,29 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
         updateClue();
 
+        mGetOrDeleteLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLocation == null) {
+                    mGoogleApiClient.connect();
+                    mGetOrDeleteLocationButton.setText(R.string.delete_location_button);
+                } else {
+                    mLatitudeTextView.setText(R.string.latitude_text);
+                    mLongitudeTextView.setText(R.string.longitude_text);
+                    mGetOrDeleteLocationButton.setText(R.string.get_location_button);
+                    mLocation = null;
+                }
+
+            }
+        });
+
+        mShowOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMap();
+            }
+        });
+
         mSubmitAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,14 +176,25 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                         EditText clueAnswerEditText = (EditText) findViewById(R.id.clue_answer_edit_text);
 
                         String clueAnswer = clueAnswerEditText.getText().toString();
-                        clueAnswerEditText.setText("");
 
-                        answer.setText(clueAnswer);
-                        answer.setPictureUri(null);
-                        answer.setLocation(null);
+                        if(clueAnswer.length() != 0){
+                            clueAnswerEditText.setText("");
 
-                        mClueBank.remove(mCurrentClueIndex);
-                        break;
+                            answer.setText(clueAnswer);
+                            answer.setPictureUri(null);
+                            answer.setLocation(null);
+
+                            mClueBank.remove(mCurrentClueIndex);
+                            break;
+                        }else{
+
+                            Toast.makeText(v.getContext(), "Must enter answer first", Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "Must enter answer first");
+
+                            return;
+                        }
+
+
 
                     case Clue.PICTURE:
                         if (mFileUri != null) {
@@ -240,11 +204,12 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                             answer.setLocation(null);
 
                             mClueBank.remove(mCurrentClueIndex);
+                            mTakeOrDeletePhotoButton.setText(R.string.take_picture_button);
 
                             mFileUri = null;
                             mImageView.setImageBitmap(null);
                             mImageView.setVisibility(View.GONE);
-                            mDeletePicture.setVisibility(View.GONE);
+
                             break;
 
                         } else {
@@ -253,16 +218,20 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                             return;
                         }
 
-
                     case Clue.LOCATION:
-                        String clueLocationAnswer = "{Test Location}";
+                        if(mLocation != null){
+                            answer.setLocation(mLocation.toString());
+                            answer.setText(null);
+                            answer.setPictureUri(null);
 
-                        answer.setLocation(clueLocationAnswer);
-                        answer.setText(null);
-                        answer.setPictureUri(null);
+                            mClueBank.remove(mCurrentClueIndex);
+                            break;
 
-                        mClueBank.remove(mCurrentClueIndex);
-                        break;
+                        }else{
+                            Log.d(TAG, "Must get location first");
+                            Toast.makeText(ClueDisplayActivity.this, "Must get location first", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                 }
 
                 mClueAnswers.addAnswer(answer);  // adds answer to db
@@ -291,6 +260,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 if (mCurrentClueIndex < 0) {
                     mCurrentClueIndex += mClueBank.size();
                 }
+                deleteLocation();
                 deleteImage();
                 updateClue();
             }
@@ -300,42 +270,82 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 mCurrentClueIndex = (mCurrentClueIndex + 1) % mClueBank.size();
+
+                deleteLocation();
+
                 deleteImage();
                 updateClue();
             }
         });
 
-        mTakePhotoButton.setOnClickListener(new View.OnClickListener() {
+
+        mTakeOrDeletePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // create Intent to take a picture and return control to the calling application
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                mFileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri); // set the image file name
+                if (mFileUri == null) {
+                    // create Intent to take a picture and return control to the calling application
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    mFileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri); // set the image file name
 
-                // start the image capture Intent
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                    // start the image capture Intent
+                    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+
+                } else {
+                    deleteImage();
+                    Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
+                    mTakeOrDeletePhotoButton.setText(R.string.take_picture_button);
+                }
+
+
             }
         });
-
-        mDeletePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteImage();
-                Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
-            }
-        });
-
-
 
         // if you want to load map from fragment which is already defined in the layout
         // SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // mapFragment.getMapAsync(this);
     }
 
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint){
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(mLocation != null){
+
+            mLatitudeTextView.setText(getResources().getString(R.string.longitude_text) + " " + mLocation.getLatitude());
+            mLongitudeTextView.setText(getResources().getString(R.string.longitude_text) + " " + mLocation.getLongitude());
+        }else{
+            Toast.makeText(this, "Can't get location", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Cannot connect to location services");
+        }
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(TAG, "Connection suspended");
+    }
+
+    public void deleteLocation(){
+        mGetOrDeleteLocationButton.setText(R.string.get_location_button);
+        mLatitudeTextView.setText(R.string.latitude_text);
+        mLongitudeTextView.setText(R.string.longitude_text);
+        mLocationLayout.setVisibility(LinearLayout.GONE);
+        mLocation = null;
+    }
+
     public void deleteImage(){
         if(mFileUri != null){
-            mDeletePicture.setVisibility(View.GONE);
+            mTakeOrDeletePhotoButton.setVisibility(View.VISIBLE);
+            mTakeOrDeletePhotoButton.setText(R.string.take_picture_button);
             File file = new File(mFileUri.toString());
             file.delete();
             mFileUri = null;
@@ -347,8 +357,9 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                mTakeOrDeletePhotoButton.setText(R.string.delete_picture);
                 mImageView.setVisibility(View.VISIBLE);
-                mDeletePicture.setVisibility(View.VISIBLE);
+
                 // Image captured and saved to mFileUri specified in the Intent
                 // Toast.makeText(this, "Image saved to:\n" + mFileUri.toString(), Toast.LENGTH_LONG).show();
                 Bitmap image = BitmapFactory.decodeFile(mFileUri.getPath());
@@ -399,8 +410,6 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         Intent intent = getIntent();
         intent.getStringExtra(CreateHuntActivity.PLAYER_ID);
 
-
-
         Hunts huntsDb = new Hunts(this);
         UUID huntId = huntsDb.getHunt(huntName).getId();
 
@@ -445,30 +454,21 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
         switch(clue.getClueType()) {
             case Clue.TEXT:
-                mEnterAnswerTextView.setVisibility(View.VISIBLE);
-                mAnswerText.setVisibility(EditText.VISIBLE);
-
-                mTakePhotoButton.setVisibility(Button.GONE);
-                mSubmitLocationButton.setVisibility(Button.GONE);
-
+                mAnswerTextLayout.setVisibility(LinearLayout.VISIBLE);
+                mTakeOrDeletePhotoButton.setVisibility(Button.GONE);
+                mLocationLayout.setVisibility(LinearLayout.GONE);
                 break;
+
             case Clue.PICTURE:
-
-                mTakePhotoButton.setVisibility(Button.VISIBLE);
-
-
-
-                mEnterAnswerTextView.setVisibility(View.GONE);
-                mAnswerText.setVisibility(EditText.GONE);
-                mSubmitLocationButton.setVisibility(Button.GONE);
+                mTakeOrDeletePhotoButton.setVisibility(Button.VISIBLE);
+                mAnswerTextLayout.setVisibility(LinearLayout.GONE);
+                mLocationLayout.setVisibility(LinearLayout.GONE);
                 break;
 
             case Clue.LOCATION:
-                mSubmitLocationButton.setVisibility(Button.VISIBLE);
-
-                mEnterAnswerTextView.setVisibility(View.GONE);
-                mAnswerText.setVisibility(EditText.GONE);
-                mTakePhotoButton.setVisibility(Button.GONE);
+                mLocationLayout.setVisibility(LinearLayout.VISIBLE);
+                mAnswerTextLayout.setVisibility(LinearLayout.GONE);
+                mTakeOrDeletePhotoButton.setVisibility(Button.GONE);
         }
     }
 
@@ -481,6 +481,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     private static File getOutputMediaFile(int type){
         System.out.println("SD Mounted: " + Environment.getExternalStorageState());
 
+        // stores them in a public directory visible to all apps on device
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "TreasureHunt");
         // This location works best if you want the created images to be shared
@@ -516,7 +517,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     android.support.v4.app.FragmentTransaction ft;
 
     // opens up separate activity and displays it
-    public void openMap(View view){
+    public void openMap(){
 
         if(mapsActivity == null){
             fm = getSupportFragmentManager();

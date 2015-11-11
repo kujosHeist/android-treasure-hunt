@@ -25,13 +25,13 @@
     <string name="title_activity_clue_display">Clue Display</string>
 
     <string name="show_on_map">Show on Map</string>
-    <string name="take_picture">Take Picture</string>
+    <string name="take_picture_button">Take Picture</string>
     <string name="clue">Clue: </string>
     <string name="title_activity_maps">Map</string>
-    <string name="delete_image">Delete Image</string>
+    <string name="delete_picture">Delete Image</string>
     <string name="save_image">Save Image</string>
     <string name="enter_clue_answer_text">Enter Your Answer:</string>
-    <string name="submit_location_button">Submit Location</string>
+
     <string name="submit_answer_button">Submit Answer</string>
     <string name="start_hunt_button">Start Hunt</string>
     <string name="join_hunt_button">Join Hunt</string>
@@ -52,5 +52,10 @@
     <string name="test_player_name">Elliot</string>
     <string name="test_team_name">fsociety</string>
     <string name="empty">null</string>
+    <string name="title_activity_location_test">LocationTestActivity</string>
+    <string name="get_location_button">Get Location</string>
+    <string name="latitude_text">Latitude: </string>
+    <string name="longitude_text">Longitude: </string>
+    <string name="delete_location_button">Delete Location</string>
 
 </resources>

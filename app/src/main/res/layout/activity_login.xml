@@ -24,4 +24,13 @@
         android:padding="20dp"
         android:id="@+id/options_button" />
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/get_location_button"
+        android:textSize="40dp"
+        android:padding="20dp"
+        android:id="@+id/location_test_button" />
+
 </LinearLayout>

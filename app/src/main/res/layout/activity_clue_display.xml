@@ -28,55 +28,46 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_on_map"
+            android:padding="20dp"
+            android:id="@+id/show_on_map_button"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit_answer_button"
+            android:id="@+id/submit_answer_button"
+            android:padding="20dp"/>
+    </LinearLayout>
+
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/show_on_map"
+        android:visibility="gone"
         android:padding="20dp"
-        android:onClick="openMap"/>
+        android:text="@string/take_picture_button"
+        android:id="@+id/take_picture_button"/>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/button_layout">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/take_picture"
-
-                android:visibility="gone"
-                android:padding="20dp"
-                android:id="@+id/take_photo_button"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/save_image"
-                android:visibility="gone"
-                android:padding="20dp"
-                android:id="@+id/save_image"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/delete_image"
-                android:visibility="gone"
-                android:padding="20dp"
-                android:id="@+id/delete_image" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:visibility="gone"
+        android:id="@+id/answer_text_layout">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:id="@+id/enter_answer_text"
             android:textSize="20dp"
             android:text="@string/enter_clue_answer_text"/>
@@ -85,36 +76,39 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/clue_answer_edit_text"
-            android:visibility="gone"
             android:padding="20dp"/>
     </LinearLayout>
 
-    <Button
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit_location_button"
-        android:id="@+id/submit_location_button"
         android:visibility="gone"
-        android:padding="20dp"/>
+        android:orientation="vertical"
+        android:id="@+id/location_layout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:id="@+id/latitude_text"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_location_button"
+            android:id="@+id/get_location_button"
+            android:padding="20dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:id="@+id/longitude_text"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit_answer_button"
-        android:id="@+id/submit_answer_button"
-        android:padding="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/latitude_text"
+            android:id="@+id/latitude_text"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/longitude_text"
+            android:id="@+id/longitude_text"/>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
