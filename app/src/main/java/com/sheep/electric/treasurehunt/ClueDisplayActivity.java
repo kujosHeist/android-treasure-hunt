@@ -244,6 +244,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                         }
                 }
 
+                closeMap();
                 mClueAnswers.addAnswer(answer);  // adds answer to db
 
                 if (mClueBank.size() > 0) {
@@ -270,9 +271,11 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 if (mCurrentClueIndex < 0) {
                     mCurrentClueIndex += mClueBank.size();
                 }
+                closeMap();
                 deleteLocation();
                 deleteImage();
                 updateClue();
+
             }
         });
 
@@ -280,11 +283,11 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 mCurrentClueIndex = (mCurrentClueIndex + 1) % mClueBank.size();
-
                 deleteLocation();
-
+                closeMap();
                 deleteImage();
                 updateClue();
+
             }
         });
 
@@ -292,6 +295,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         mTakeOrDeletePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeMap();
                 if (mFileUri == null) {
                     // create Intent to take a picture and return control to the calling application
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -539,13 +543,18 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             ft.replace(R.id.mapOrCameraDisplay,  mapsActivity, "tag");
             ft.commit();
         }else{
+            closeMap();
+        }
+    }
 
+    public void closeMap(){
+        if(mapsActivity != null){
             ft = fm.beginTransaction();
             ft.remove(mapsActivity);
             mapsActivity = null;
             ft.commit();
-
         }
+
     }
 
     @Override
