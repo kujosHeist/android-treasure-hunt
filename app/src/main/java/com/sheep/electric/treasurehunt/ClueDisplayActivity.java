@@ -32,8 +32,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.File;
@@ -556,41 +554,43 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
             Clue currentClue = mClueBank.get(mCurrentClueIndex);
 
-            //String clueLocations = currentClue.getClueLocation();  // returns string of comma seperated lat/longs
+            String clueLocations = currentClue.getClueLocation();  // returns string of comma seperated lat/longs
 
-            String clueLocations = "53.307730,-6.222316,53.308409,-6.222694,53.307525,-6.223118,53.307018,-6.221982,53.307967,-6.221377";
-            String[] locs = clueLocations.split(",");
-            ArrayList<String> locationArray = new ArrayList<>();
+            //String clueLocations = "53.307730,-6.222316,53.308409,-6.222694,53.307525,-6.223118,53.307018,-6.221982,53.307967,-6.221377";
+            String[] rawLatLong = clueLocations.split(",");
+            ArrayList<String> latLongListList = new ArrayList<>();
 
-            locationArray.addAll(Arrays.asList(locs));
+            latLongListList.addAll(Arrays.asList(rawLatLong));
 
-           // ArrayList<String> locationArray = (ArrayList<String>) Arrays.asList(clueLocations.split(","));
 
-            if(locationArray.size() % 2 != 0 || locationArray.size() == 0){
-                throw new Exception("Error parsing clue location");
+
+            if(latLongListList.size() % 2 != 0 || latLongListList.size() == 0){
+                Log.d(TAG, "Cannot Parse");
+                //throw new Exception("Error parsing clue location");
             }
 
-            LatLng centralCluePoint = new LatLng(Double.parseDouble(locationArray.remove(0)), Double.parseDouble(locationArray.remove(0)));
+            LatLng centralCluePoint = new LatLng(Double.parseDouble(latLongListList.remove(0)), Double.parseDouble(latLongListList.remove(0)));
             Log.d(TAG, centralCluePoint.toString());
 
-
-
-            int numPoints = locationArray.size()/2;
+            int numPoints = latLongListList.size()/2;
 
             ArrayList<LatLng> latLongs = new ArrayList<>();
 
             for(int i = 0, j = 0, k = 1; i < numPoints; i++, j+=2, k+=2){
-                latLongs.add(new LatLng(Double.parseDouble(locationArray.get(j)), Double.parseDouble(locationArray.get(k))));
+                latLongs.add(new LatLng(Double.parseDouble(latLongListList.get(j)), Double.parseDouble(latLongListList.get(k))));
                 Log.d(TAG, latLongs.get(i).toString());
             }
 
             googleMap.setMyLocationEnabled(true);
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centralCluePoint, MAP_ZOOM_LEVEL));
-            Polygon polygon = googleMap.addPolygon(new PolygonOptions()
-                    .addAll(latLongs)
-                    .strokeColor(Color.RED));
-            googleMap.addMarker(new MarkerOptions().title("Hint").snippet(("Here be swans")).position(centralCluePoint));
+            if(latLongListList.size() > 0){
+                googleMap.addPolygon(new PolygonOptions()
+                        .addAll(latLongs)
+                        .strokeColor(Color.RED));
+                //googleMap.addMarker(new MarkerOptions().title("Hint").snippet(("Here be swans")).position(centralCluePoint));
+            }
+
 
         }catch(Exception e){
             e.printStackTrace();
