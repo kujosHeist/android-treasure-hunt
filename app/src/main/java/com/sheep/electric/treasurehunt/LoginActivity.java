@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+
 public class LoginActivity extends Activity {
 
     private Button mLoginButton;
@@ -19,7 +20,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mLocationTestButton = (Button) findViewById(R.id.location_test_button);
+        /* mLocationTestButton = (Button) findViewById(R.id.location_test_button);
 
         mLocationTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,7 +28,7 @@ public class LoginActivity extends Activity {
                 Intent intent = new Intent(v.getContext(), LocationTestActivity.class);
                 startActivity(intent);
             }
-        });
+        });   */
 
 
         mLoginButton = (Button) findViewById(R.id.login_button);

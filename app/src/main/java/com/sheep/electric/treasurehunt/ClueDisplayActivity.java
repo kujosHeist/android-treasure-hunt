@@ -32,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.File;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 
 public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -92,6 +94,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     private Clues mCluesDb;
 
+    private ArrayList<LatLng> mCheckedInLocations;
+
 
 
     // Camera code ******************************************************************************
@@ -109,11 +113,12 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clue_display);
+
+        mCheckedInLocations = new ArrayList<LatLng>();
 
         mCluesDb = new Clues(this);
 
@@ -230,11 +235,14 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
                     case Clue.LOCATION:
                         if(mLocation != null){
-                            answer.setLocation(mLocation.toString());
+
+                            answer.setLocation(mLocation.getLatitude() + "," + mLocation.getLongitude());
                             answer.setText(null);
                             answer.setPictureUri(null);
 
                             mClueBank.remove(mCurrentClueIndex);
+                            deleteLocation();
+                            mCheckedInLocations = new ArrayList<LatLng>();
                             break;
 
                         }else{
@@ -275,6 +283,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 deleteLocation();
                 deleteImage();
                 updateClue();
+                mCheckedInLocations = new ArrayList<LatLng>();
 
             }
         });
@@ -287,6 +296,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 closeMap();
                 deleteImage();
                 updateClue();
+                mCheckedInLocations = new ArrayList<LatLng>();
 
             }
         });
@@ -333,11 +343,11 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     public void onConnected(Bundle connectionHint){
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if(mLocation != null){
-
+            mCheckedInLocations.add(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
             mLatitudeTextView.setText(getResources().getString(R.string.longitude_text) + " " + mLocation.getLatitude());
             mLongitudeTextView.setText(getResources().getString(R.string.longitude_text) + " " + mLocation.getLongitude());
         }else{
-            Toast.makeText(this, "Can't get location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Cannot get location", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Cannot connect to location services");
         }
         mGoogleApiClient.disconnect();
@@ -411,9 +421,6 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     }
 
     public UUID populateClueBank(String huntName){
-
-
-
 
         if(mCluesDb.getClues().size() == 0) {
             Log.d(TAG, "Clue db is empty, adding clues from hunts.xml");
@@ -554,13 +561,11 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             mapsActivity = null;
             ft.commit();
         }
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         try{
-
             Clue currentClue = mClueBank.get(mCurrentClueIndex);
 
             String clueLocations = currentClue.getClueLocation();  // returns string of comma seperated lat/longs
@@ -592,12 +597,21 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
             googleMap.setMyLocationEnabled(true);
 
+
+
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centralCluePoint, MAP_ZOOM_LEVEL));
             if(latLongListList.size() > 0){
                 googleMap.addPolygon(new PolygonOptions()
                         .addAll(latLongs)
                         .strokeColor(Color.RED));
                 //googleMap.addMarker(new MarkerOptions().title("Hint").snippet(("Here be swans")).position(centralCluePoint));
+            }
+
+            if(mCheckedInLocations.size() > 0){
+                for(LatLng checkedIn: mCheckedInLocations){
+                    googleMap.addMarker(new MarkerOptions().title("Checked in Here!").snippet(("")).position(checkedIn));
+                }
+
             }
 
 

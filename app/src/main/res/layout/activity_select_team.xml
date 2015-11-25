@@ -9,8 +9,7 @@
         android:layout_height="wrap_content"
         android:text="@string/select_team"
         android:id="@+id/select_hunt_text"
-        android:textSize="25dp"
-        />
+        android:textSize="25dp" />
 
     <Button
         android:layout_marginTop="100dp"

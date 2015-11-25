@@ -21,12 +21,14 @@ public class SummaryActivity extends Activity {
 
     private Answers mAnswersDb;
 
+    public static int count = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
-
+        Log.d(TAG, "count Summary activity: " + ++count);
 
         Intent intent = getIntent();
         String playerId = intent.getStringExtra(ClueDisplayActivity.PLAYER_ID);
@@ -47,12 +49,12 @@ public class SummaryActivity extends Activity {
         mTeamNameTextView = (TextView) findViewById(R.id.team_name_text);
         mTeamNameTextView.setText(player.getTeam());
 
-        Log.d(TAG, "Received extra playerId: " + playerId);
-        Log.d(TAG, "Received extra huntId: " + huntId);
-
         mAnswersDb = new Answers(this);
 
+
         ArrayList<Answer> answers = (ArrayList<Answer>) mAnswersDb.getAnswers(UUID.fromString(playerId), UUID.fromString(huntId));
+
+        Log.d(TAG, "Answers size: " + answers.size());
 
         if(answers != null){
             AnswersAdapter adapter = new AnswersAdapter(this, answers);

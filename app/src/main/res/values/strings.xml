@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">TreasureHunt</string>
+    <string name="app_name">Treasure Hunt</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="title_activity_start_hunt">Start Hunt</string>
+    <string name="title_activity_start_hunt">Treasure Hunt</string>
 
 
     <string name="title_activity_join_hunt">Join Hunt</string>
@@ -12,7 +12,7 @@
     <string name="enter_hunt_location">Enter Hunt Location: </string>
 
     <string name="select_team">Select Team</string>
-    <string name="team_options">Enter Team Details</string>
+    <string name="team_options">Treasure Hunt</string>
 
     <string name="title_activity_team_select">TeamSelectActivity</string>
     <string name="enter_team_name">Enter Team Name</string>
@@ -33,7 +33,8 @@
     <string name="enter_clue_answer_text">Enter Your Answer:</string>
 
     <string name="submit_answer_button">Submit Answer</string>
-    <string name="start_hunt_button">Start Hunt</string>
+    <string name="start_hunt_button">Treasure Hunt</string>
+    <string name="start_hunt_button2">Start Hunt</string>
     <string name="join_hunt_button">Join Hunt</string>
     <string name="view_available_hunts_button">View Available Hunts</string>
     <string name="create_new_hunt_button">Create New Hunt</string>
@@ -43,7 +44,7 @@
     <string name="enter_team_name_text">Enter Team Name:</string>
     <string name="options_button">Options</string>
     <string name="enter_team_name_edit">Enter Team Name:</string>
-    <string name="title_activity_summary">SummaryActivity</string>
+    <string name="title_activity_summary">Treasure Hunt</string>
     <string name="summary_text">Summary</string>
     <string name="player_text">Player: </string>
     <string name="hunt_text">Hunt: </string>
