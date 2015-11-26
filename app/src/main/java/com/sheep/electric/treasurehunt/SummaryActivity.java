@@ -1,18 +1,25 @@
 package com.sheep.electric.treasurehunt;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class SummaryActivity extends Activity {
+public class SummaryActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "SummaryActivity";
     private TextView mHuntNameTextView;
@@ -25,8 +32,11 @@ public class SummaryActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
+
 
         Log.d(TAG, "count Summary activity: " + ++count);
 
@@ -62,6 +72,7 @@ public class SummaryActivity extends Activity {
             listView.setAdapter(adapter);
         }
 
+        //openMap();
     }
 
     @Override
@@ -85,4 +96,53 @@ public class SummaryActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng sydney = new LatLng(-33.867, 151.206);
+
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+
+        googleMap.addMarker(new MarkerOptions()
+                .title("Sydney")
+                .snippet("The most populous city in Australia.")
+                .position(sydney));
+    }
+
+
+
+    private SupportMapFragment mapsActivity;
+    private android.support.v4.app.FragmentManager fm;
+    private android.support.v4.app.FragmentTransaction ft;
+
+    // opens up separate activity and displays it
+    public void openMap(){
+
+        if(mapsActivity == null){
+            fm = getSupportFragmentManager();
+            ft = fm.beginTransaction();
+
+            mapsActivity = new SupportMapFragment();
+            mapsActivity.getMapAsync(this);
+
+           // ft.replace(R.id.summaryMapDisplay,  mapsActivity, "tag");
+            ft.commit();
+        }else{
+            closeMap();
+        }
+    }
+
+    public void closeMap(){
+        if(mapsActivity != null){
+            ft = fm.beginTransaction();
+            ft.remove(mapsActivity);
+            mapsActivity = null;
+            ft.commit();
+        }
+    }
+
+
+
+
 }

@@ -49,7 +49,7 @@
     <string name="player_text">Player: </string>
     <string name="hunt_text">Hunt: </string>
     <string name="team_text">Team: </string>
-    <string name="answers">Answers</string>
+    <string name="answers">Answers Correct:</string>
     <string name="test_player_name">Elliot</string>
     <string name="test_team_name">fsociety</string>
     <string name="empty">null</string>
@@ -58,5 +58,6 @@
     <string name="latitude_text">Latitude: </string>
     <string name="longitude_text">Longitude: </string>
     <string name="delete_location_button">Delete Location</string>
+    <string name="title_activity_summary_map">SummaryMapActivity</string>
 
 </resources>

@@ -7,7 +7,7 @@
 
         <clues>
 
-            <!--
+<!--
             <clue>
                 <text>Take a picture with a Swan</text>
                 <type>0</type>
@@ -15,21 +15,19 @@
                 <location>53.307730,-6.222316,53.308409,-6.222694,53.307525,-6.223118,53.307018,-6.221982,53.307967,-6.221377</location>
             </clue>
 
-            -->
-            <!--
-           <clue>
-               <text>Who sponsored the main science Centre?</text>
-               <type>1</type>
-               <answer>Denis O Brien|Denis o' brien| Denis O'Brien</answer>
-               <location>53.308507,-6.224200,53.309202,-6.225273,53.307846,-6.225762,53.307419,-6.223416,53.308970,-6.223026</location>
-           </clue>
-
            <clue>
                <text>On this Mound, a stone bird found, a place to lay an.. </text>
                <type>0</type>
                <answer>null</answer>
                <location>53.3069227,-6.2234008,53.309326,-6.225269,53.307440,-6.226137,53.306668,-6.220241,53.308055,-6.218647,53.309610,-6.221364</location>
            </clue>
+-->
+            <clue>
+                <text>Who sponsored the main science Centre?</text>
+                <type>1</type>
+                <answer>Denis O Brien|Denis o' brien| Denis O'Brien</answer>
+                <location>53.308507,-6.224200,53.309202,-6.225273,53.307846,-6.225762,53.307419,-6.223416,53.308970,-6.223026</location>
+            </clue>
 
            <clue>
                <text>Full name of special research unit based in Comp Sci?</text>
@@ -37,21 +35,20 @@
                <answer>UCD Centre for Cybersecurity and Cybercrime Investigation|UCD Center for Cybersecurity and Cybercrime Investigation</answer>
                <location>53.3069227,-6.2234008, 53.311050, -6.224041, 53.309849, -6.228270, 53.308437, -6.225748</location>
            </clue>
-           -->
+
             <clue>
                 <text>Find the man who can walk through walls...</text>
                 <type>2</type>
-                <answer>53.304140, -6.218154, 10</answer>
+                <answer>10</answer>
                 <location>53.304140, -6.218154</location>
             </clue>
 
             <clue>
-                <text>Check in for the lake</text>
+                <text>Check in form the 'other' lake</text>
                 <type>2</type>
-                <answer>53.307716, -6.222340, 200</answer>
+                <answer>200</answer>
                 <location>53.307716, -6.222340</location>
             </clue>
-
 
         </clues>
     </hunt>

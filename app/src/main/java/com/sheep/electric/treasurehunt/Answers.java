@@ -180,4 +180,18 @@ public class Answers {
         return new AnswerCursorWrapper(cursor);
     }
 
+    public static int getNumberOfCorrectAnswers(ArrayList<Answer> answers, Clues cluesDb){
+
+        int answersCorrect = 0;
+
+        for(Answer answer: answers){
+            answer.setResult(cluesDb.getClue(answer.getClueId()));
+            if(answer.getResult()){
+                answersCorrect++;
+            }
+        }
+
+        return answersCorrect;
+    }
+
 }

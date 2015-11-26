@@ -100,17 +100,11 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     // Camera code ******************************************************************************
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-
-
     GoogleApiClient mGoogleApiClient;
-
-
-
 
 
     @Override
@@ -200,6 +194,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                             answer.setPictureUri(null);
                             answer.setLocation(null);
 
+
+
                             mClueBank.remove(mCurrentClueIndex);
                             break;
                         }else{
@@ -240,6 +236,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                             answer.setText(null);
                             answer.setPictureUri(null);
 
+
+
                             mClueBank.remove(mCurrentClueIndex);
                             deleteLocation();
                             mCheckedInLocations = new ArrayList<LatLng>();
@@ -261,7 +259,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                     }
                     updateClue();
                 } else {
-                    Intent intent = new Intent(v.getContext(), SummaryActivity.class);
+
+                    Intent intent = new Intent(v.getContext(), SummaryMapActivity.class);
                     intent.putExtra(PLAYER_ID, mPlayerId.toString());
                     intent.putExtra(HUNT_ID, mHuntId.toString());
 

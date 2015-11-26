@@ -18,20 +18,18 @@ import java.util.UUID;
 /**
  * Created by Shane on 10/11/2015.
  */
-public class AnswersAdapter extends ArrayAdapter<Answer> {
+public class AnswersAdapter extends ArrayAdapter<Answer>  {
 
     private static final String TAG = "AnswersAdapter";
-
-
 
     public AnswersAdapter(Context context, ArrayList<Answer> answers) {
         super(context, 0, answers);
     }
 
-
+    View mConvertView;
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-
+        mConvertView = convertView;
 
         Answer answer = getItem(position);
 
@@ -103,12 +101,6 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
                 String[] userLocation = answer.getLocation().split(",");  // gets the location submitted by user in form: lat,long
                 Log.d(TAG, "User submitted location: " +  userLocation[0] + "," + userLocation[1]);
 
-
-
-
-
-
-
                 double distance = distFrom(latitude, longitude, Double.parseDouble(userLocation[0]), Double.parseDouble(userLocation[1]));
                 Log.d(TAG, "Distance from checkin to target: " + distance+ ", threshold: "  +thresholdRadius);
 
@@ -121,7 +113,6 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 
                     convertView.setBackgroundColor(Color.parseColor("RED"));
                 }
-
 
 
                 answerTextView.setVisibility(View.GONE);
@@ -146,4 +137,6 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 
         return dist;
     }
+
+
 }
