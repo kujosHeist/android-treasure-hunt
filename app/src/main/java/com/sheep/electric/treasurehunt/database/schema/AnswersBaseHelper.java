@@ -4,9 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Shane on 09/11/2015.
- */
+
 public class AnswersBaseHelper extends SQLiteOpenHelper {
 
     public static String DATABASE_NAME = "answerBase.db";

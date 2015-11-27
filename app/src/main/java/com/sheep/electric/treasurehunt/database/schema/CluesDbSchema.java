@@ -1,8 +1,6 @@
 package com.sheep.electric.treasurehunt.database.schema;
 
-/**
- * Created by Shane on 03/11/2015.
- */
+
 public class CluesDbSchema {
     public static final class CluesTable{
         public static final String NAME = "clues";

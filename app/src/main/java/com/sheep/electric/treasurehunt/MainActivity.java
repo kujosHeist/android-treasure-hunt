@@ -16,8 +16,6 @@ public class MainActivity extends Activity {
     private Button mCreateHuntButton;
     private Button mJoinHuntButton;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +65,6 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-
         final Activity activity = this;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.on_back_button);
@@ -88,5 +85,4 @@ public class MainActivity extends Activity {
         });
         builder.show();
     }
-
 }

@@ -2,9 +2,8 @@ package com.sheep.electric.treasurehunt.database.access;
 
 import java.util.UUID;
 
-/**
- * Created by Shane on 29/10/2015.
- */
+
+// stores clues
 public class Clue {
 
     public static final int PICTURE = 0;

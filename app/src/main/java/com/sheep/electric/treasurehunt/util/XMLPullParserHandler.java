@@ -2,6 +2,11 @@ package com.sheep.electric.treasurehunt.util;
 
 import android.content.Context;
 
+import com.sheep.electric.treasurehunt.database.access.Clue;
+import com.sheep.electric.treasurehunt.database.access.Clues;
+import com.sheep.electric.treasurehunt.database.access.Hunt;
+import com.sheep.electric.treasurehunt.database.access.Hunts;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -10,12 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.sheep.electric.treasurehunt.database.access.Clue;
-import com.sheep.electric.treasurehunt.database.access.Clues;
-import com.sheep.electric.treasurehunt.database.access.Hunt;
-import com.sheep.electric.treasurehunt.database.access.Hunts;
-
-
+// this class is used to read in the hunt details form the hunts.xml file, only needs to do this
+// once after the app gets installed, then the hunt details are stored in the db
 public class XMLPullParserHandler {
     private String mText;
     private Hunt mHunt;

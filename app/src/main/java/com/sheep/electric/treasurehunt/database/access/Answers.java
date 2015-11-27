@@ -7,18 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
+import com.sheep.electric.treasurehunt.database.schema.AnswerCursorWrapper;
+import com.sheep.electric.treasurehunt.database.schema.AnswersBaseHelper;
+import com.sheep.electric.treasurehunt.database.schema.AnswersDbSchema.AnswersTable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import com.sheep.electric.treasurehunt.database.schema.AnswerCursorWrapper;
-import com.sheep.electric.treasurehunt.database.schema.AnswersBaseHelper;
-import com.sheep.electric.treasurehunt.database.schema.AnswersDbSchema.AnswersTable;
-
-/**
- * Created by Shane on 08/11/2015.
- */
+// used to access db
 public class Answers {
 
     public static final String TAG = "ANSWERS";

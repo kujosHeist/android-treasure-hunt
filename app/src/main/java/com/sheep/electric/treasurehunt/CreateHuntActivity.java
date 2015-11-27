@@ -44,7 +44,6 @@ public class CreateHuntActivity extends Activity implements AdapterView.OnItemSe
                 EditText teamNameText = (EditText) findViewById(R.id.enter_team_name_edit);
                 String teamName = teamNameText.getText().toString();
 
-
                 // create new player
                 Player player = new Player(userName, mHuntSelected, teamName);
                 Players playersDb = new Players(v.getContext());

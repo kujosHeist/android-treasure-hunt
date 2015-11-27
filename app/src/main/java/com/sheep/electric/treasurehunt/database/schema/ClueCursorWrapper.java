@@ -7,9 +7,6 @@ import com.sheep.electric.treasurehunt.database.access.Clue;
 
 import java.util.UUID;
 
-/**
- * Created by Shane on 03/11/2015.
- */
 public class ClueCursorWrapper extends CursorWrapper {
 
     public ClueCursorWrapper(Cursor cursor) {

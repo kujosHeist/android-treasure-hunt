@@ -2,9 +2,7 @@ package com.sheep.electric.treasurehunt.database.access;
 
 import java.util.UUID;
 
-/**
- * Created by Shane on 03/11/2015.
- */
+// used store players
 public class Player {
 
     private String mName;

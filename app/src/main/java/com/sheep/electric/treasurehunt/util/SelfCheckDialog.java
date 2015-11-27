@@ -16,7 +16,7 @@ public class SelfCheckDialog extends DialogFragment {
         builder.setMessage(R.string.self_check_dialog_text)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
+                        // do nothing
                     }
                 });
 

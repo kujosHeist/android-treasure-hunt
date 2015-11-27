@@ -7,9 +7,6 @@ import com.sheep.electric.treasurehunt.database.access.Hunt;
 
 import java.util.UUID;
 
-/**
- * Created by Shane on 03/11/2015.
- */
 public class HuntCursorWrapper extends CursorWrapper {
     /**
      * Creates a cursor wrapper.

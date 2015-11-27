@@ -7,9 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.UUID;
 
-/**
- * Created by Shane on 02/11/2015.
- */
+// this class is used to store the users anwers, and is also created directly from the answers db
 public class Answer {
 
     public static String TAG = "Answer";
@@ -28,7 +26,6 @@ public class Answer {
         mClueId = clueId;
         mPlayerId = playerId;
         mHuntId = huntId;
-
     }
 
     public Answer(UUID id, UUID clueId, UUID playerId, UUID huntId, Uri pictureUri, String text, String location){
@@ -82,12 +79,12 @@ public class Answer {
         return mClueId;
     }
 
+    // sets the result of the answer to true or false
     public void setResult(Clue clue) {
-
         result = false;
-
         switch (clue.getClueType()){
             case Clue.TEXT:
+                // text clues can have multiple correct answers separated by a bar
                 String[] correctAnswers = clue.getClueAnswer().split("\\|");
 
                 for(int i = 0; i < correctAnswers.length; i++){
@@ -98,9 +95,9 @@ public class Answer {
                     }
                 }
                 break;
+
+            // location clue answers check are they within a certain distance
             case Clue.LOCATION:
-
-
 
                 LatLng userLatLng = getCoords(mLocation);
                 LatLng clueLatLng = getCoords(clue.getClueLocation());

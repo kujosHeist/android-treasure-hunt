@@ -2,9 +2,7 @@ package com.sheep.electric.treasurehunt.database.access;
 
 import java.util.UUID;
 
-/**
- * Created by Shane on 03/11/2015.
- */
+// used to store hunt db items
 public class Hunt {
 
     private String mName;

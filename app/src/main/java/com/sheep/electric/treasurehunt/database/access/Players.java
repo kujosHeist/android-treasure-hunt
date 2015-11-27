@@ -5,18 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.sheep.electric.treasurehunt.database.schema.PlayerCursorWrapper;
+import com.sheep.electric.treasurehunt.database.schema.PlayersBaseHelper;
+import com.sheep.electric.treasurehunt.database.schema.PlayersDbSchema.PlayersTable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.sheep.electric.treasurehunt.database.schema.PlayerCursorWrapper;
-import com.sheep.electric.treasurehunt.database.schema.PlayersBaseHelper;
-
-import com.sheep.electric.treasurehunt.database.schema.PlayersDbSchema.PlayersTable;
-
-/**
- * Created by Shane on 02/11/2015.
- */
+// used to access players db, not really used
 public class Players {
     private SQLiteDatabase mDatabase;
     private String mName;

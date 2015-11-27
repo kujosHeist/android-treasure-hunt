@@ -6,15 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.sheep.electric.treasurehunt.database.schema.HuntCursorWrapper;
 import com.sheep.electric.treasurehunt.database.schema.HuntsBaseHelper;
 import com.sheep.electric.treasurehunt.database.schema.HuntsDbSchema.HuntsTable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
+// used to access db
 public class Hunts {
     public SQLiteDatabase mDatabase;
     public String mName;

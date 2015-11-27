@@ -13,8 +13,6 @@ public class LoginActivity extends Activity {
 
     private Button mLoginButton;
 
-    private Button mOptionsButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

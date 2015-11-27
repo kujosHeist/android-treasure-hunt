@@ -56,8 +56,8 @@
         </clues>
     </hunt>
 
+    <!-- Clues not implemented for the other two colleges -->
     <hunt>
-
         <name>Trinity Hunt</name>
         <hunt_location>53.3437954,-6.2567603,17z</hunt_location>
         <creator>Adam Moore</creator>

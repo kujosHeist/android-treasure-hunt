@@ -1,8 +1,5 @@
 package com.sheep.electric.treasurehunt.database.schema;
 
-/**
- * Created by Shane on 03/11/2015.
- */
 public class PlayersDbSchema {
     public static final class PlayersTable {
         public static final String NAME = "players";

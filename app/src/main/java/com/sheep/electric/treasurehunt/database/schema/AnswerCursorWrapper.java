@@ -4,9 +4,9 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.net.Uri;
 
-import java.util.UUID;
-
 import com.sheep.electric.treasurehunt.database.access.Answer;
+
+import java.util.UUID;
 
 /**
  * Created by Shane on 09/11/2015.
@@ -14,11 +14,6 @@ import com.sheep.electric.treasurehunt.database.access.Answer;
 public class AnswerCursorWrapper extends CursorWrapper{
     private static final String TAG = "AnswerCursorWrapper";
 
-    /**
-     * Creates a cursor wrapper.
-     *
-     * @param cursor The underlying cursor to wrap.
-     */
     public AnswerCursorWrapper(Cursor cursor) {
         super(cursor);
     }

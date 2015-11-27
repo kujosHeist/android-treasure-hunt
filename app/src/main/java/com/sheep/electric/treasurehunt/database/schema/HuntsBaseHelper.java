@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Shane on 03/11/2015.
- */
 public class HuntsBaseHelper extends SQLiteOpenHelper {
 
     public static final int VERSION = 1;

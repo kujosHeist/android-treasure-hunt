@@ -1,8 +1,6 @@
 package com.sheep.electric.treasurehunt.database.access;
 
-/**
- * Created by Shane on 02/11/2015.
- */
+// used to access db
 public class Team {
 
     private String mName;

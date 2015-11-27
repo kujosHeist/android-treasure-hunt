@@ -7,9 +7,6 @@ import com.sheep.electric.treasurehunt.database.access.Player;
 
 import java.util.UUID;
 
-/**
- * Created by Shane on 03/11/2015.
- */
 public class PlayerCursorWrapper extends CursorWrapper {
 
     public PlayerCursorWrapper(Cursor cursor) {

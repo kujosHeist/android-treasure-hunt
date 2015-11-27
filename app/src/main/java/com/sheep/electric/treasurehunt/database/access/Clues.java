@@ -5,17 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.sheep.electric.treasurehunt.database.schema.ClueCursorWrapper;
 import com.sheep.electric.treasurehunt.database.schema.CluesBaseHelper;
 import com.sheep.electric.treasurehunt.database.schema.CluesDbSchema.CluesTable;
 
-/**
- * Created by Shane on 03/11/2015.
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+
+// used to access db
 public class Clues {
     private SQLiteDatabase mDatabase;
 
