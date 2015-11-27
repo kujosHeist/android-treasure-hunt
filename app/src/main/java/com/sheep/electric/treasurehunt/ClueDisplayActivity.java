@@ -1,6 +1,9 @@
 package com.sheep.electric.treasurehunt;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import android.content.Context;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -58,10 +64,10 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
     private ImageButton mArrowLeftButton;
     private ImageButton mArrowRightButton;
-    private Button mTakeOrDeletePhotoButton;
+    private ImageButton mTakeOrDeletePhotoButton;
     private TextView mClueTextView;
     private EditText mAnswerText;
-    private Button mGetOrDeleteLocationButton;
+    private ImageButton mGetOrDeleteLocationButton;
 
     private Button mShowOnMap;
 
@@ -131,8 +137,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         mEnterAnswerTextView = (TextView) findViewById(R.id.enter_answer_text);
 
 
-        mTakeOrDeletePhotoButton = (Button) findViewById(R.id.take_picture_button);
-        mGetOrDeleteLocationButton = (Button) findViewById(R.id.get_location_button);
+        mTakeOrDeletePhotoButton = (ImageButton) findViewById(R.id.take_picture_button);
+        mGetOrDeleteLocationButton = (ImageButton) findViewById(R.id.get_location_button);
         mArrowLeftButton = (ImageButton) findViewById(R.id.arrow_left);
         mArrowRightButton = (ImageButton) findViewById(R.id.arrow_right);
         mSubmitAnswerButton = (Button) findViewById(R.id.submit_answer_button);
@@ -156,11 +162,11 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             public void onClick(View v) {
                 if (mLocation == null) {
                     mGoogleApiClient.connect();
-                    mGetOrDeleteLocationButton.setText(R.string.delete_location_button);
+                    mGetOrDeleteLocationButton.setImageResource(R.drawable.ic_delete_black_24dp);
                 } else {
                     mLatitudeTextView.setText(R.string.latitude_text);
                     mLongitudeTextView.setText(R.string.longitude_text);
-                    mGetOrDeleteLocationButton.setText(R.string.get_location_button);
+                    mGetOrDeleteLocationButton.setImageResource(R.drawable.ic_add_location_black_24dp);
                     mLocation = null;
                 }
 
@@ -215,7 +221,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                             answer.setLocation(null);
 
                             mClueBank.remove(mCurrentClueIndex);
-                            mTakeOrDeletePhotoButton.setText(R.string.take_picture_button);
+                            mTakeOrDeletePhotoButton.setImageResource(R.drawable.ic_camera_enhance_black_24dp);
 
                             mFileUri = null;
                             mImageView.setImageBitmap(null);
@@ -260,6 +266,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                     updateClue();
                 } else {
 
+                    // All clues have been answer so opens summary screen
                     Intent intent = new Intent(v.getContext(), SummaryMapActivity.class);
                     intent.putExtra(PLAYER_ID, mPlayerId.toString());
                     intent.putExtra(HUNT_ID, mHuntId.toString());
@@ -267,6 +274,8 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                     Log.d(TAG, "Putting extra playerId: " + mPlayerId);
                     Log.d(TAG, "Putting extra huntId: " + mHuntId);
                     startActivity(intent);
+
+                    finish();  // close this activity so you cannot go back to it
                 }
             }
         });
@@ -314,11 +323,10 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                     // start the image capture Intent
                     startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
-
                 } else {
                     deleteImage();
                     Toast.makeText(v.getContext(), "Image Deleted", Toast.LENGTH_LONG).show();
-                    mTakeOrDeletePhotoButton.setText(R.string.take_picture_button);
+                    mTakeOrDeletePhotoButton.setImageResource(R.drawable.ic_camera_enhance_black_24dp);
                 }
 
 
@@ -358,7 +366,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     }
 
     public void deleteLocation(){
-        mGetOrDeleteLocationButton.setText(R.string.get_location_button);
+        mGetOrDeleteLocationButton.setImageResource(R.drawable.ic_add_location_black_24dp);
         mLatitudeTextView.setText(R.string.latitude_text);
         mLongitudeTextView.setText(R.string.longitude_text);
         mLocationLayout.setVisibility(LinearLayout.GONE);
@@ -368,7 +376,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     public void deleteImage(){
         if(mFileUri != null){
             mTakeOrDeletePhotoButton.setVisibility(View.VISIBLE);
-            mTakeOrDeletePhotoButton.setText(R.string.take_picture_button);
+            mTakeOrDeletePhotoButton.setImageResource(R.drawable.ic_camera_enhance_black_24dp);
             File file = new File(mFileUri.toString());
             file.delete();
             mFileUri = null;
@@ -380,7 +388,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                mTakeOrDeletePhotoButton.setText(R.string.delete_picture);
+                mTakeOrDeletePhotoButton.setImageResource(R.drawable.ic_delete_black_24dp);
                 mImageView.setVisibility(View.VISIBLE);
 
                 // Image captured and saved to mFileUri specified in the Intent
@@ -401,6 +409,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_clue_display, menu);
+        //Item item = (Item) findViewById(R.id.action_settings);
         return true;
     }
 
@@ -467,6 +476,15 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    public void hideSoftKeyboard(){
+        Log.d(TAG, "Hiding soft keyboard");
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
     public void updateClue(){
         Clue clue = mClueBank.get(mCurrentClueIndex);
 
@@ -480,12 +498,15 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 break;
 
             case Clue.PICTURE:
+                hideSoftKeyboard();
                 mTakeOrDeletePhotoButton.setVisibility(Button.VISIBLE);
                 mAnswerTextLayout.setVisibility(LinearLayout.GONE);
                 mLocationLayout.setVisibility(LinearLayout.GONE);
+
                 break;
 
             case Clue.LOCATION:
+                hideSoftKeyboard();
                 mLocationLayout.setVisibility(LinearLayout.VISIBLE);
                 mAnswerTextLayout.setVisibility(LinearLayout.GONE);
                 mTakeOrDeletePhotoButton.setVisibility(Button.GONE);
@@ -596,8 +617,6 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
 
             googleMap.setMyLocationEnabled(true);
 
-
-
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centralCluePoint, MAP_ZOOM_LEVEL));
             if(latLongListList.size() > 0){
                 googleMap.addPolygon(new PolygonOptions()
@@ -610,7 +629,6 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 for(LatLng checkedIn: mCheckedInLocations){
                     googleMap.addMarker(new MarkerOptions().title("Checked in Here!").snippet(("")).position(checkedIn));
                 }
-
             }
 
 
@@ -620,14 +638,33 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
             // just show standard map of ucd
             googleMap.setMyLocationEnabled(true);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UCD_LAT_LONG, MAP_ZOOM_LEVEL));
-
-
         }
-
     }
 
 
+    @Override
+    public void onBackPressed() {
 
+        final Activity activity = this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(R.string.on_back_button);
+        builder.setMessage(R.string.clue_activity_on_back_button_message);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(activity, MainActivity.class);
+                startActivity(intent);
+                activity.finish();
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+    }
 
 
     @Override

@@ -40,7 +40,7 @@
     <string name="create_new_hunt_button">Create New Hunt</string>
     <string name="create_hunt_button">Create Hunt</string>
     <string name="select_hunt_text">Select Hunt:</string>
-    <string name="login_button">Login</string>
+    <string name="login_button">Enter</string>
     <string name="enter_team_name_text">Enter Team Name:</string>
     <string name="options_button">Options</string>
     <string name="enter_team_name_edit">Enter Team Name:</string>
@@ -49,7 +49,7 @@
     <string name="player_text">Player: </string>
     <string name="hunt_text">Hunt: </string>
     <string name="team_text">Team: </string>
-    <string name="answers">Answers Correct:</string>
+    <string name="user_score_text">Score:</string>
     <string name="test_player_name">Elliot</string>
     <string name="test_team_name">fsociety</string>
     <string name="empty">null</string>
@@ -58,6 +58,23 @@
     <string name="latitude_text">Latitude: </string>
     <string name="longitude_text">Longitude: </string>
     <string name="delete_location_button">Delete Location</string>
-    <string name="title_activity_summary_map">SummaryMapActivity</string>
+    <string name="title_activity_summary_map">Summary</string>
+    <string name="play_again_text">Play Again?</string>
+    <string name="main_menu_text">Main Menu</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+
+    <string name="clue_activity_on_back_button_message">You will lose unsaved progress</string>
+    <string name="on_back_button">Are you sure?</string>
+    <string name="main_activity_on_back_button_message">Do you wish to log out?</string>
+    <string name="summary_activity_on_back_button_message">Are you sure you want to exit?</string>
+    <string name="user_image_text">You Answered:</string>
+    <string name="answer_image_text">Correct Answer Example:</string>
+    <string name="image_self_check_text">Is your answer correct?</string>
+    <string name="hunt_name">UCD Hunt</string>
+    <string name="self_check_dialog_text">Treasure Hunt Complete!\n\nDon\'t forget to manually check your pictures!</string>
+    <string name="fire">OK</string>
+    <string name="location_was_correct">Location was correct!</string>
+    <string name="location_incorrect">Location was incorrect!\nYou were outside the circle</string>
 
 </resources>

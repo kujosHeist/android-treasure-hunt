@@ -13,22 +13,13 @@ public class LoginActivity extends Activity {
 
     private Button mLoginButton;
 
-    private Button mLocationTestButton;
+    private Button mOptionsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /* mLocationTestButton = (Button) findViewById(R.id.location_test_button);
-
-        mLocationTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), LocationTestActivity.class);
-                startActivity(intent);
-            }
-        });   */
 
 
         mLoginButton = (Button) findViewById(R.id.login_button);
@@ -37,8 +28,10 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
+
     }
 
     @Override
@@ -62,5 +55,7 @@ public class LoginActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }

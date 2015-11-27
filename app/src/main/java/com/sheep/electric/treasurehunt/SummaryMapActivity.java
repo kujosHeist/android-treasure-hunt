@@ -1,21 +1,27 @@
 package com.sheep.electric.treasurehunt;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -39,7 +46,13 @@ import java.util.UUID;
 
 public class SummaryMapActivity extends FragmentActivity {
 
-    private ListFragment mList;
+    public static float ZOOM_LEVEL = 15f;
+    public static LatLng UCD_CENTRAL = new LatLng(53.3076, -6.22208);
+
+    public static String CORRECT_COLOR = "#33cc33";
+    public static String INCORRECT_COLOR = "#e62d00";
+
+    public static String PICTURE_COLOR = "#4285F4";
 
     private MapAdapter mAdapter;
 
@@ -49,39 +62,51 @@ public class SummaryMapActivity extends FragmentActivity {
     private TextView mPlayerNameTextView;
     private TextView mTeamNameTextView;
 
+    private Button mMainMenuButton;
+    private Button mPlayAgainButton;
+
     private Answers mAnswersDb;
 
     private TextView mAnswersCorrectText;
+
+    public Clues mCluesDb;
+    public Hunts mHuntsDb;
+    public Players mPlayerDb;
+
+    public int mAnswersCorrect;
+    public int mAnswersSize;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_summary_map);
+
+        SelfCheckDialog checkDialog = new SelfCheckDialog();
+        checkDialog.show(getSupportFragmentManager(), TAG);
+
+        mHuntsDb = new Hunts(this);
+        mPlayerDb = new Players(this);
+        mAnswersDb = new Answers(this);
+        mCluesDb = new Clues(this);
 
         Intent intent = getIntent();
         String playerId = intent.getStringExtra(ClueDisplayActivity.PLAYER_ID);
         String huntId = intent.getStringExtra(ClueDisplayActivity.HUNT_ID);
 
-        Hunts huntDb = new Hunts(this);
-        Hunt hunt = huntDb.getHunt(UUID.fromString(huntId));
 
+        Hunt hunt = mHuntsDb.getHunt(UUID.fromString(huntId));
         mHuntNameTextView = (TextView) findViewById(R.id.hunt_name_text);
         Log.d(TAG, "View is null? " + (mHuntNameTextView == null));
         mHuntNameTextView.setText(hunt.getName());
 
-        Players playerDb = new Players(this);
-        Player player = playerDb.getPlayer(UUID.fromString(playerId));
 
+        Player player = mPlayerDb.getPlayer(UUID.fromString(playerId));
         mPlayerNameTextView = (TextView) findViewById(R.id.player_name_text);
         mPlayerNameTextView.setText(player.getName());
 
         mTeamNameTextView = (TextView) findViewById(R.id.team_name_text);
         mTeamNameTextView.setText(player.getTeam());
-
-        mAnswersDb = new Answers(this);
-
 
         ArrayList<Answer> answers = (ArrayList<Answer>) mAnswersDb.getAnswers(UUID.fromString(playerId), UUID.fromString(huntId));
 
@@ -94,55 +119,147 @@ public class SummaryMapActivity extends FragmentActivity {
 
 
         Log.d(TAG, "Setting score");
-        mAnswersCorrectText = (TextView) findViewById(R.id.answers_correct_text);
-
-        Clues cluesDb = new Clues(this);
-        int answersCorrect = Answers.getNumberOfCorrectAnswers(answers, cluesDb);
-        mAnswersCorrectText.setText(" " + answersCorrect + "/" + answers.size());
+        mAnswersCorrectText = (TextView) findViewById(R.id.user_score);
 
 
+        mAnswersCorrect = Answers.getNumberOfCorrectAnswers(answers, mCluesDb);
+        mAnswersSize = answers.size();
+        mAnswersCorrectText.setText("Score: " + mAnswersCorrect + "/" + mAnswersSize);
+
+        mPlayAgainButton = (Button) findViewById(R.id.play_again_button);
+        mMainMenuButton = (Button) findViewById(R.id.main_menu_button);
+
+        mMainMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        mPlayAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CreateHuntActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+        final Activity activity = this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(R.string.on_back_button);
+        builder.setMessage(R.string.summary_activity_on_back_button_message);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(activity, MainActivity.class);
+                startActivity(intent);
+                activity.finish();
+
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+    }
 
     private class MapAdapter extends ArrayAdapter<Answer> {
 
         private static final String TAG = "SummaryMapActivity";
         private final HashSet<MapView> mMaps = new HashSet<MapView>();
 
-        private int length;
+        public Bitmap mUserImage;
+        public Bitmap mAnswerImage;
+
+        public TextView mClueTextView;
+
+        public TextView mUserAnswerTextView;
+        public TextView mAnswerTextView;
+        public LinearLayout mAnswerTextLayout;
+
+        public LinearLayout mPictureLayout;
+        public TextView mLocationView;
+
+        public ImageView mUserImageView;
+        public ImageView mAnswerImageView;
+
+        public HashMap<Integer, Bitmap> mUserImageMap;
+        public HashMap<Integer, Bitmap> mAnswerImageMap;
+
+        public RadioButton mYesButton;
+        public RadioButton mNoButton;
+        public LinearLayout mRadioLayout;
+
+        public HashMap<Integer, View> viewMap;
+
+        public HashMap<Integer, String> selfCheckMap;
+
+        public RadioGroup mRadioGroup;
+
+
 
         public MapAdapter(Context context, ArrayList<Answer> answers) {
             super(context, 0, answers);
-            length = answers.size();
+            mUserImageMap = new HashMap<>();
+            mAnswerImageMap = new HashMap<>();
+
+            selfCheckMap = new HashMap<>();
+            viewMap = new HashMap<>();
         }
 
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             Answer answer = getItem(position);
             UUID clueId = answer.getClueId();
-            Clues cluesDb = new Clues(getContext());
-            Clue clue = cluesDb.getClue(clueId);
 
+            Clue clue = mCluesDb.getClue(clueId);
 
             if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.summary_list_row, parent, false);
             }
 
-            TextView clueTextView = (TextView) convertView.findViewById(R.id.clue_text);
-            clueTextView.setText("Clue Text: " + clue.getClueText());
+            mClueTextView = (TextView) convertView.findViewById(R.id.clue_text);
+            mClueTextView.setText(clue.getClueText());
 
-            TextView answerTextView  = (TextView) convertView.findViewById(R.id.answer_text);
-            ImageView pictureView = (ImageView) convertView.findViewById(R.id.answer_picture);
-            TextView locationView = (TextView) convertView.findViewById(R.id.answer_location);
+            mAnswerTextLayout = (LinearLayout) convertView.findViewById(R.id.answer_text_layout);
+            mUserAnswerTextView = (TextView) convertView.findViewById(R.id.user_answer_text);
+            mAnswerTextView = (TextView) convertView.findViewById(R.id.answer_text);
+
+            mYesButton = (RadioButton) convertView.findViewById(R.id.self_check_yes);
+            mNoButton = (RadioButton) convertView.findViewById(R.id.self_check_no);
+
+
+            mPictureLayout = (LinearLayout) convertView.findViewById(R.id.image_layout);
+            mLocationView = (TextView) convertView.findViewById(R.id.answer_location);
+
+            mUserImageView = (ImageView) convertView.findViewById(R.id.user_image);
+            mAnswerImageView = (ImageView) convertView.findViewById(R.id.answer_image);
+
+            mRadioLayout = (LinearLayout) convertView.findViewById(R.id.self_check_radio);
+
 
 
             switch (clue.getClueType()){
                 case Clue.TEXT:
-                    answerTextView.setVisibility(View.VISIBLE);
-                    answerTextView.setText("Answer Text: " + answer.getText());
+                    mAnswerTextLayout.setVisibility(View.VISIBLE);
+                    mUserAnswerTextView.setText("You Answered: " + answer.getText());
+                    mAnswerTextView.setText("Correct Answer: " + clue.getClueAnswer().split("\\|")[0]);
+
+
                     convertView.findViewById(R.id.lite_listrow_map).setVisibility(View.GONE);
 
                     answer.setResult(clue);
@@ -150,46 +267,122 @@ public class SummaryMapActivity extends FragmentActivity {
                     Log.d(TAG, "Clue text result: " + clue.getClueText() + " as " + answerCorrect );
 
                     if(answerCorrect){
-                        convertView.setBackgroundColor(Color.parseColor("GREEN"));
+                        convertView.setBackgroundColor(Color.parseColor(CORRECT_COLOR));
+
                     }else{
-                        convertView.setBackgroundColor(Color.parseColor("RED"));
+                        convertView.setBackgroundColor(Color.parseColor(INCORRECT_COLOR));
+                    }
+
+                    mPictureLayout.setVisibility(View.GONE);
+                    mLocationView.setVisibility(View.GONE);
+                    break;
+
+                case Clue.PICTURE:
+                    mPictureLayout.setVisibility(View.VISIBLE);
+
+                    mRadioGroup = (RadioGroup) convertView.findViewById(R.id.radio_group);
+
+                    convertView.findViewById(R.id.lite_listrow_map).setVisibility(View.GONE);
+
+                    if(mUserImage == null || mUserImageMap.get(position) == null){
+                        mUserImage = BitmapFactory.decodeFile(answer.getPictureUri().getPath());
+                        mUserImageMap.put(position, mUserImage);
+                    }
+
+                    if(mAnswerImage == null || mAnswerImageMap.get(position) == null){
+                        //mAnswerImage = BitmapFactory.decodeFile(answer.getPictureUri().getPath());
+
+                        String answerPicString = clue.getClueAnswer();
+
+
+                        Log.d(TAG, mCluesDb.getClue((answer.getClueId())).getClueText());
+
+                        if(answerPicString.equalsIgnoreCase("man_walk_through_wall")){
+                            mAnswerImage = BitmapFactory.decodeResource(getResources(), R.drawable.man_walk_through_wall);
+                        }else{
+                            mAnswerImage = BitmapFactory.decodeResource(getResources(), R.drawable.ucd_egg);
+                        }
+
+
+
+
+                        mAnswerImageMap.put(position, mAnswerImage);
+                    }
+
+                    mUserImageView.setImageBitmap(mUserImageMap.get(position));
+                    mAnswerImageView.setImageBitmap(mAnswerImageMap.get(position));
+
+                    final View finalConvertView = convertView;
+
+                    final TextView finalAnswersCorrect = mAnswersCorrectText;
+                    mYesButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(TAG, "Correct: " + mAnswersCorrect);
+                            Log.d(TAG, "Text: " + finalAnswersCorrect.getText());
+                            mAnswersCorrect++;
+
+
+                            Log.d(TAG, "Correct 2: " + mAnswersCorrect);
+                            selfCheckMap.put(position, CORRECT_COLOR);
+                            finalConvertView.setBackgroundColor(Color.parseColor(CORRECT_COLOR));
+                            //mRadioLayout.setVisibility(View.GONE);
+
+                            View view =  (View) v.getParent().getParent();
+                            view.setVisibility(View.GONE);
+                        }
+                    });
+                    mAnswersCorrectText.setText("Score: " + mAnswersCorrect + "/" + mAnswersSize);
+
+                    mNoButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mRadioLayout.setVisibility(View.GONE);
+                            selfCheckMap.put(position, INCORRECT_COLOR);
+                            finalConvertView.setBackgroundColor(Color.parseColor(INCORRECT_COLOR));
+                            //mRadioLayout.setVisibility(View.GONE);
+
+                            View view = (View) v.getParent().getParent();
+                            view.setVisibility(View.GONE);
+
+                        }
+                    });
+
+
+                    if(selfCheckMap.get(position) != null){
+                        convertView.setBackgroundColor(Color.parseColor(selfCheckMap.get(position)));
+
+                    }else{
+                        mRadioLayout.setVisibility(View.VISIBLE);
+                        convertView.setBackgroundColor(Color.parseColor(PICTURE_COLOR));
+                        mYesButton.setChecked(false);
+                        mNoButton.setChecked(false);
                     }
 
 
 
-                    pictureView.setVisibility(View.GONE);
-                    locationView.setVisibility(View.GONE);
-                    break;
+                    mAnswerTextLayout.setVisibility(View.GONE);
+                    mLocationView.setVisibility(View.GONE);
 
-                case Clue.PICTURE:
-                    pictureView.setVisibility(View.VISIBLE);
 
-                    convertView.findViewById(R.id.lite_listrow_map).setVisibility(View.GONE);
-
-                    Bitmap image = BitmapFactory.decodeFile(answer.getPictureUri().getPath());
-                    pictureView.setImageBitmap(image);
-
-                    convertView.setBackgroundColor(Color.parseColor("#ADD8E6"));
-
-                    answerTextView.setVisibility(View.GONE);
-                    locationView.setVisibility(View.GONE);
+                    viewMap.put(position, convertView);
                     break;
                 case Clue.LOCATION:
                     convertView.findViewById(R.id.lite_listrow_map).setVisibility(View.VISIBLE);
 
-                    locationView.setVisibility(View.VISIBLE);
+                    mLocationView.setVisibility(View.VISIBLE);
 
                     answer.setResult(clue);
                     if(answer.getResult()){
-                        locationView.setText("Location was correct!");
-                        convertView.setBackgroundColor(Color.parseColor("GREEN"));
+                        mLocationView.setText(R.string.location_was_correct);
+                        convertView.setBackgroundColor(Color.parseColor(CORRECT_COLOR));
                     }else{
-                        locationView.setText("Location was incorrect!");
-                        convertView.setBackgroundColor(Color.parseColor("RED"));
+                        mLocationView.setText(R.string.location_incorrect);
+                        convertView.setBackgroundColor(Color.parseColor(INCORRECT_COLOR));
                     }
 
-                    answerTextView.setVisibility(View.GONE);
-                    pictureView.setVisibility(View.GONE);
+                    mAnswerTextLayout.setVisibility(View.GONE);
+                    mPictureLayout.setVisibility(View.GONE);
 
                     // create map area and put it in the activity
                     ViewHolder mapHolder;
@@ -214,62 +407,10 @@ public class SummaryMapActivity extends FragmentActivity {
 
 
             return convertView;
-
         }
 
-/*
-        public View getLocationView(View convertView, Clue clue, Answer answer){
-            convertView.findViewById(R.id.lite_listrow_map).setVisibility(View.VISIBLE);
-
-            TextView clueTextView = (TextView) convertView.findViewById(R.id.clue_text);
-            clueTextView.setText("Clue Text: " + clue.getClueText());
-
-            TextView answerTextView  = (TextView) convertView.findViewById(R.id.answer_text);
-            ImageView pictureView = (ImageView) convertView.findViewById(R.id.answer_picture);
-            TextView locationView = (TextView) convertView.findViewById(R.id.answer_location);
 
 
-            locationView.setVisibility(View.VISIBLE);
-            Log.d(TAG, "Clue text: " + clue.getClueText());
-
-            LatLng userLatLng = getCoords(answer.getLocation());
-            LatLng clueLatLng = getCoords(clue.getClueLocation());
-            double thresholdRadius = getRadius(clue.getClueAnswer());
-
-
-            Log.d(TAG, "User submitted location: " +  userLatLng.latitude + "," + userLatLng.longitude);
-
-            double distance = distFrom(clueLatLng.latitude, clueLatLng.longitude, userLatLng.latitude, userLatLng.longitude);
-            Log.d(TAG, "Distance from checkin to target: " + distance + ", threshold: " + thresholdRadius);
-
-            if(distance < thresholdRadius){
-                locationView.setText("Location was correct!");
-                convertView.setBackgroundColor(Color.parseColor("GREEN"));
-            }else{
-                locationView.setText("Location was incorrect!");
-                convertView.setBackgroundColor(Color.parseColor("RED"));
-            }
-
-            answerTextView.setVisibility(View.GONE);
-            pictureView.setVisibility(View.GONE);
-
-
-            ViewHolder mapHolder;
-
-            mapHolder = new ViewHolder();
-            mapHolder.mapView = (MapView) convertView.findViewById(R.id.lite_listrow_map);
-
-            convertView.setTag(mapHolder);
-
-            mapHolder.initializeMapView(clueLatLng, userLatLng, thresholdRadius);
-
-            // Keep track of MapView
-            mMaps.add(mapHolder.mapView);
-
-            return convertView;
-        }
-
-*/
         public HashSet<MapView> getMaps() {
             return mMaps;
         }
@@ -321,13 +462,10 @@ public class SummaryMapActivity extends FragmentActivity {
                     .strokeColor(Color.RED)
                     .strokeWidth(4));
 
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(cluelatLng, 16f));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(UCD_CENTRAL, ZOOM_LEVEL));
 
             // Set the map type back to normal.
             map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
     }
-
-
-
 }

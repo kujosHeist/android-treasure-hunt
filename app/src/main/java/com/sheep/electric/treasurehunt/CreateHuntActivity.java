@@ -55,6 +55,7 @@ public class CreateHuntActivity extends Activity implements AdapterView.OnItemSe
                 Log.d(TAG, "Player ID: " + playerId);
                 Log.d(TAG, "Hunt Name: " + mHuntSelected);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -98,5 +99,13 @@ public class CreateHuntActivity extends Activity implements AdapterView.OnItemSe
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 }

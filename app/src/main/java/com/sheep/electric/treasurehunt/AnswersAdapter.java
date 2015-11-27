@@ -46,8 +46,8 @@ public class AnswersAdapter extends ArrayAdapter<Answer>  {
         TextView clueTextView = (TextView) convertView.findViewById(R.id.clue_text);
         clueTextView.setText("Clue Text: " + clue.getClueText());
 
-        TextView answerTextView  = (TextView) convertView.findViewById(R.id.answer_text);
-        ImageView pictureView = (ImageView) convertView.findViewById(R.id.answer_picture);
+        TextView answerTextView  = (TextView) convertView.findViewById(R.id.user_answer_text);
+        ImageView pictureView = (ImageView) convertView.findViewById(R.id.answer_image);
         TextView locationView = (TextView) convertView.findViewById(R.id.answer_location);
 
 
@@ -105,11 +105,11 @@ public class AnswersAdapter extends ArrayAdapter<Answer>  {
                 Log.d(TAG, "Distance from checkin to target: " + distance+ ", threshold: "  +thresholdRadius);
 
                 if(distance < thresholdRadius){
-                    locationView.setText("Location was correct!");
+                    locationView.setText(R.string.location_was_correct);
 
                     convertView.setBackgroundColor(Color.parseColor("GREEN"));
                 }else{
-                    locationView.setText("Location was incorrect!");
+                    locationView.setText(R.string.location_incorrect);
 
                     convertView.setBackgroundColor(Color.parseColor("RED"));
                 }

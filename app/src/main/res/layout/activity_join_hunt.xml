@@ -15,8 +15,7 @@
         android:text="@string/select_team"
         android:id="@+id/selectTeam"
         android:layout_marginTop="100dp"
-        android:layout_centerHorizontal="true"
-        android:onClick="selectTeam" />
+        android:layout_centerHorizontal="true"/>
 
 
 </LinearLayout>

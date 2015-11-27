@@ -1,12 +1,15 @@
 package com.sheep.electric.treasurehunt;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -28,14 +31,14 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateHuntActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
         mJoinHuntButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), JoinHuntActivity.class);
-                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "This feature will be added in next Update", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -60,6 +63,30 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        final Activity activity = this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(R.string.on_back_button);
+        builder.setMessage(R.string.main_activity_on_back_button_message);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+
+                startActivity(intent);
+                activity.finish();
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
     }
 
 }
