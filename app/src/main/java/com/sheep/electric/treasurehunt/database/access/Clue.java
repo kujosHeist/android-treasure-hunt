@@ -1,4 +1,4 @@
-package com.sheep.electric.treasurehunt;
+package com.sheep.electric.treasurehunt.database.access;
 
 import java.util.UUID;
 

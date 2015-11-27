@@ -1,10 +1,8 @@
-package database;
+package com.sheep.electric.treasurehunt.database.schema;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import database.HuntsDbSchema.HuntsTable;
 
 /**
  * Created by Shane on 03/11/2015.
@@ -20,12 +18,12 @@ public class HuntsBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + HuntsTable.NAME + "(" +
+        db.execSQL("create table " + HuntsDbSchema.HuntsTable.NAME + "(" +
             " _id integer primary key autoincrement, " +
-            HuntsTable.Cols.UUID + "," +
-            HuntsTable.Cols.NAME + "," +
-            HuntsTable.Cols.LOCATION + "," +
-            HuntsTable.Cols.CREATOR + ")"
+            HuntsDbSchema.HuntsTable.Cols.UUID + "," +
+            HuntsDbSchema.HuntsTable.Cols.NAME + "," +
+            HuntsDbSchema.HuntsTable.Cols.LOCATION + "," +
+            HuntsDbSchema.HuntsTable.Cols.CREATOR + ")"
         );
 
     }

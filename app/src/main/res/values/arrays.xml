@@ -2,39 +2,5 @@
 <resources>
     <string-array name="hunt_list">
         <item>UCD Hunt</item>
-        <item>Trinity Hunt</item>
-        <item>DCU Hunt</item>
-    </string-array>
-
-    <string-array name="clue_list">
-        <item>Take a picture with a Swan</item>
-        <item>Who sponsored the main science Centre?</item>
-        <item>On this Mound, a stone bird found, a place to lay an.. </item>
-        <item>Full name of special research unit based in Comp Sci?</item>
-        <item>Find an check in from 3 bodies of water on Campus</item>
-    </string-array>
-
-    <string-array name="clue_type_list">
-        <item>0</item>
-        <item>1</item>
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-    <string-array name="clue_answer_list">
-        <item>null</item>
-        <item>Denis O Brien</item>
-        <item>null</item>
-        <item>Center for Cyber Crime Research</item>
-        <item>{3 different sets of gps locations}</item>
-    </string-array>
-
-    <string-array name="clue_location_list">
-        <item>{set of loctions}</item>
-        <item>{set of locations}</item>
-        <item>{set of locations}</item>
-        <item>{set of locations}</item>
-        <item>{set of locations}</item>
     </string-array>
 </resources>

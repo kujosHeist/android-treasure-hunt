@@ -40,6 +40,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.sheep.electric.treasurehunt.util.XMLPullParserHandler;
 
 import java.io.File;
 import java.io.InputStream;
@@ -49,6 +50,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import com.sheep.electric.treasurehunt.database.access.Answer;
+import com.sheep.electric.treasurehunt.database.access.Answers;
+import com.sheep.electric.treasurehunt.database.access.Clue;
+import com.sheep.electric.treasurehunt.database.access.Clues;
+import com.sheep.electric.treasurehunt.database.access.Hunt;
+import com.sheep.electric.treasurehunt.database.access.Hunts;
 
 
 public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
@@ -267,7 +275,7 @@ public class ClueDisplayActivity extends FragmentActivity implements OnMapReadyC
                 } else {
 
                     // All clues have been answer so opens summary screen
-                    Intent intent = new Intent(v.getContext(), SummaryMapActivity.class);
+                    Intent intent = new Intent(v.getContext(), SummaryActivity.class);
                     intent.putExtra(PLAYER_ID, mPlayerId.toString());
                     intent.putExtra(HUNT_ID, mHuntId.toString());
 

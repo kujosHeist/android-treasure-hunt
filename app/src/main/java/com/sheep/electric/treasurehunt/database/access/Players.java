@@ -1,4 +1,4 @@
-package com.sheep.electric.treasurehunt;
+package com.sheep.electric.treasurehunt.database.access;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import database.PlayerCursorWrapper;
-import database.PlayersBaseHelper;
-import database.PlayersDbSchema;
-import database.PlayersDbSchema.PlayersTable;
+import com.sheep.electric.treasurehunt.database.schema.PlayerCursorWrapper;
+import com.sheep.electric.treasurehunt.database.schema.PlayersBaseHelper;
+
+import com.sheep.electric.treasurehunt.database.schema.PlayersDbSchema.PlayersTable;
 
 /**
  * Created by Shane on 02/11/2015.

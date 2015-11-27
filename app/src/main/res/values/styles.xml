@@ -16,9 +16,6 @@
     <color name="colorPrimary">#4285F4</color>
     <color name="colorPrimaryDark">#3367D6</color>
     <color name="colorAccent">#4285F4</color>
-    <color name="textColorPrimary">#FFFFFF</color>
-    <color name="windowBackground">#303030</color>
-    <color name="navigationBarColor">#000000</color>
 
     <!-- inherit from the material theme -->
     <style name="MaterialApp" parent="android:Theme.Material">
@@ -29,8 +26,9 @@
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="android:colorAccent">@color/colorAccent</item>
-
     </style>
+    
+
 
 
 

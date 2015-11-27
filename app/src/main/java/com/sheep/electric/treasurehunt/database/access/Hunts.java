@@ -1,25 +1,20 @@
-package com.sheep.electric.treasurehunt;
+package com.sheep.electric.treasurehunt.database.access;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import database.HuntCursorWrapper;
-import database.HuntsBaseHelper;
-import database.HuntsDbSchema;
-import database.HuntsDbSchema.HuntsTable;
-import database.PlayersDbSchema;
-import database.PlayersDbSchema.PlayersTable;
+import com.sheep.electric.treasurehunt.database.schema.HuntCursorWrapper;
+import com.sheep.electric.treasurehunt.database.schema.HuntsBaseHelper;
+import com.sheep.electric.treasurehunt.database.schema.HuntsDbSchema.HuntsTable;
 
-/**
- * Created by Shane on 03/11/2015.
- */
+
 public class Hunts {
     public SQLiteDatabase mDatabase;
     public String mName;

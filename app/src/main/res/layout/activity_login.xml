@@ -20,6 +20,7 @@
         android:textStyle="italic"
         android:fontFamily="@string/auth_google_play_services_client_facebook_display_name"
 
+
         android:id="@+id/login_button"
 
         android:layout_gravity="center_horizontal"/>

@@ -1,10 +1,8 @@
-package database;
+package com.sheep.electric.treasurehunt.database.schema;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import database.AnswersDbSchema.AnswersTable;
 
 /**
  * Created by Shane on 09/11/2015.
@@ -20,15 +18,15 @@ public class AnswersBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + AnswersTable.NAME + "(" +
+        db.execSQL("create table " + AnswersDbSchema.AnswersTable.NAME + "(" +
                         " _id integer primary key autoincrement, " +
-                        AnswersTable.Cols.UUID + "," +
-                        AnswersTable.Cols.CLUE_ID + "," +
-                        AnswersTable.Cols.PLAYER_ID + "," +
-                        AnswersTable.Cols.HUNT_ID + "," +
-                        AnswersTable.Cols.PICTURE_URI + "," +
-                        AnswersTable.Cols.TEXT + "," +
-                        AnswersTable.Cols.LOCATION + ")"
+                        AnswersDbSchema.AnswersTable.Cols.UUID + "," +
+                        AnswersDbSchema.AnswersTable.Cols.CLUE_ID + "," +
+                        AnswersDbSchema.AnswersTable.Cols.PLAYER_ID + "," +
+                        AnswersDbSchema.AnswersTable.Cols.HUNT_ID + "," +
+                        AnswersDbSchema.AnswersTable.Cols.PICTURE_URI + "," +
+                        AnswersDbSchema.AnswersTable.Cols.TEXT + "," +
+                        AnswersDbSchema.AnswersTable.Cols.LOCATION + ")"
         );
     }
 

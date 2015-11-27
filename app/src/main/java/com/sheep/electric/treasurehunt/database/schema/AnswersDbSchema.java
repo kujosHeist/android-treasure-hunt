@@ -1,4 +1,4 @@
-package database;
+package com.sheep.electric.treasurehunt.database.schema;
 
 /**
  * Created by Shane on 09/11/2015.

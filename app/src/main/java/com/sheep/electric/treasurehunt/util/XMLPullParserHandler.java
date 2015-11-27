@@ -1,7 +1,8 @@
-package com.sheep.electric.treasurehunt;
+package com.sheep.electric.treasurehunt.util;
+
+import android.content.Context;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.InputStream;
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import android.content.Context;
-import android.util.Log;
+import com.sheep.electric.treasurehunt.database.access.Clue;
+import com.sheep.electric.treasurehunt.database.access.Clues;
+import com.sheep.electric.treasurehunt.database.access.Hunt;
+import com.sheep.electric.treasurehunt.database.access.Hunts;
 
-/**
- * Created by Shane on 03/11/2015.
- */
+
 public class XMLPullParserHandler {
     private String mText;
     private Hunt mHunt;

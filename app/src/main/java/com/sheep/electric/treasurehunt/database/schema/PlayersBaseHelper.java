@@ -1,10 +1,8 @@
-package database;
+package com.sheep.electric.treasurehunt.database.schema;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import database.PlayersDbSchema.PlayersTable;
 
 
 public class PlayersBaseHelper extends SQLiteOpenHelper {
@@ -18,12 +16,12 @@ public class PlayersBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + PlayersTable.NAME + "(" +
+        db.execSQL("create table " + PlayersDbSchema.PlayersTable.NAME + "(" +
                 " _id integer primary key autoincrement, " +
-                PlayersTable.Cols.UUID + "," +
-                PlayersTable.Cols.NAME + "," +
-                PlayersTable.Cols.TEAM + "," +
-                PlayersTable.Cols.HUNT + ")"
+                PlayersDbSchema.PlayersTable.Cols.UUID + "," +
+                PlayersDbSchema.PlayersTable.Cols.NAME + "," +
+                PlayersDbSchema.PlayersTable.Cols.TEAM + "," +
+                PlayersDbSchema.PlayersTable.Cols.HUNT + ")"
         );
     }
 

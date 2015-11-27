@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.sheep.electric.treasurehunt.database.access.Player;
+import com.sheep.electric.treasurehunt.database.access.Players;
+
 public class CreateHuntActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
 

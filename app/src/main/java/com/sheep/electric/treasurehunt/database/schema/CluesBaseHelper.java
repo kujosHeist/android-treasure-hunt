@@ -1,10 +1,8 @@
-package database;
+package com.sheep.electric.treasurehunt.database.schema;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import database.CluesDbSchema.CluesTable;
 
 /**
  * Created by Shane on 03/11/2015.
@@ -19,14 +17,14 @@ public class CluesBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + CluesTable.NAME + "(" +
+        db.execSQL("create table " + CluesDbSchema.CluesTable.NAME + "(" +
         " _id integer primary key autoincrement, " +
-                        CluesTable.Cols.UUID + "," +
-                        CluesTable.Cols.HUNT_ID + "," +
-                        CluesTable.Cols.CLUE_TEXT + "," +
-                        CluesTable.Cols.TYPE + "," +
-                        CluesTable.Cols.ANSWER + "," +
-                        CluesTable.Cols.LOCATION + ")"
+                        CluesDbSchema.CluesTable.Cols.UUID + "," +
+                        CluesDbSchema.CluesTable.Cols.HUNT_ID + "," +
+                        CluesDbSchema.CluesTable.Cols.CLUE_TEXT + "," +
+                        CluesDbSchema.CluesTable.Cols.TYPE + "," +
+                        CluesDbSchema.CluesTable.Cols.ANSWER + "," +
+                        CluesDbSchema.CluesTable.Cols.LOCATION + ")"
         );
 
     }

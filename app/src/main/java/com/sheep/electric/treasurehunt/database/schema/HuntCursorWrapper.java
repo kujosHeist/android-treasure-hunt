@@ -1,13 +1,11 @@
-package database;
+package com.sheep.electric.treasurehunt.database.schema;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.sheep.electric.treasurehunt.Hunt;
+import com.sheep.electric.treasurehunt.database.access.Hunt;
 
 import java.util.UUID;
-
-import database.HuntsDbSchema.HuntsTable;
 
 /**
  * Created by Shane on 03/11/2015.
@@ -23,10 +21,10 @@ public class HuntCursorWrapper extends CursorWrapper {
     }
 
     public Hunt getHunt(){
-        String uuidString = getString(getColumnIndex(HuntsTable.Cols.UUID));
-        String name = getString(getColumnIndex(HuntsTable.Cols.NAME));
-        String location = getString(getColumnIndex(HuntsTable.Cols.LOCATION));
-        String creator = getString(getColumnIndex(HuntsTable.Cols.CREATOR));
+        String uuidString = getString(getColumnIndex(HuntsDbSchema.HuntsTable.Cols.UUID));
+        String name = getString(getColumnIndex(HuntsDbSchema.HuntsTable.Cols.NAME));
+        String location = getString(getColumnIndex(HuntsDbSchema.HuntsTable.Cols.LOCATION));
+        String creator = getString(getColumnIndex(HuntsDbSchema.HuntsTable.Cols.CREATOR));
 
         Hunt hunt = new Hunt(UUID.fromString(uuidString));
         hunt.setName(name);

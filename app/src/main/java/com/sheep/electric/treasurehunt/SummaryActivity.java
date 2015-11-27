@@ -32,11 +32,21 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.sheep.electric.treasurehunt.util.SelfCheckDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
+
+import com.sheep.electric.treasurehunt.database.access.Answer;
+import com.sheep.electric.treasurehunt.database.access.Answers;
+import com.sheep.electric.treasurehunt.database.access.Clue;
+import com.sheep.electric.treasurehunt.database.access.Clues;
+import com.sheep.electric.treasurehunt.database.access.Hunt;
+import com.sheep.electric.treasurehunt.database.access.Hunts;
+import com.sheep.electric.treasurehunt.database.access.Player;
+import com.sheep.electric.treasurehunt.database.access.Players;
 
 /**
  * This shows to include a map in lite mode in a ListView.
@@ -44,7 +54,7 @@ import java.util.UUID;
  * {@link OnMapReadyCallback}.
  */
 
-public class SummaryMapActivity extends FragmentActivity {
+public class SummaryActivity extends FragmentActivity {
 
     public static float ZOOM_LEVEL = 15f;
     public static LatLng UCD_CENTRAL = new LatLng(53.3076, -6.22208);
@@ -178,7 +188,7 @@ public class SummaryMapActivity extends FragmentActivity {
 
     private class MapAdapter extends ArrayAdapter<Answer> {
 
-        private static final String TAG = "SummaryMapActivity";
+        private static final String TAG = "SummaryActivity";
         private final HashSet<MapView> mMaps = new HashSet<MapView>();
 
         public Bitmap mUserImage;

@@ -1,4 +1,4 @@
-package com.sheep.electric.treasurehunt;
+package com.sheep.electric.treasurehunt.database.access;
 
 /**
  * Created by Shane on 02/11/2015.
