@@ -11,6 +11,10 @@
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic3.png?token=AE3geh-u-NhTz2J-J6a4RzE1fqUsUDY_ks5YoLzwwA%3D%3D" align="left" height="200" width="120" ></a>
 
 <br />
+<br />
+<br />
+<br />
+
 
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic4.png?token=AE3gehfmUBQK2gP3iaaehHz_71ORIPnXks5YoL0vwA%3D%3D" align="left" height="200" width="120" ></a>
 
@@ -20,17 +24,6 @@
 
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic7.png?token=AE3geroYREmvV83VmKAVL-ASF-v-2qqvks5YoL1ewA%3D%3D" align="left" height="200" width="120" ></a>
 
-
-
-
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic1.png?token=AE3geumvC1uH3Fj8kBKJYzXpSZdwK1Voks5YoLqmwA%3D%3D)
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic2.png)
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic3.png)
-
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic4.png)
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic5.png)
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic6.png)
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic7.png)
 
 
 
