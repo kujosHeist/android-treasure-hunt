@@ -13,3 +13,14 @@ There are 3 different types of clues
 2. Pciture answer clues where users have to take a picture of the correct area/object
 3. Location based clue where users have to "check-in" at the right location
 
+
+**Prerequisites**: Recent version of Android Studio, Phone running android 4.0 or later
+
+## To run:
+
+* download zip and unpack to folder
+* Open project in Android Studio
+* Turn on USB debugging in android setting, and connect to computer via usb
+* Click run button in android studio and select phone from list of devices
+
+
