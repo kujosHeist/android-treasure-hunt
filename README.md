@@ -1,7 +1,6 @@
 # Treasure Hunt Android App 
 
 
-
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic0.png?token=AE3geumvC1uH3Fj8kBKJYzXpSZdwK1Voks5YoLqmwA%3D%3D" align="left" height="300" width="180" ></a>
 
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic1.png?token=AE3gesRNQbCicreFAAzO_G8VGtCYOfwbks5YoLyFwA%3D%3D" align="left" height="300" width="180" ></a>
@@ -10,7 +9,7 @@
 
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic3.png?token=AE3geh-u-NhTz2J-J6a4RzE1fqUsUDY_ks5YoLzwwA%3D%3D" align="left" height="300" width="180" ></a>
 
-<p></p>
+<hr>
 
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic4.png?token=AE3gehfmUBQK2gP3iaaehHz_71ORIPnXks5YoL0vwA%3D%3D" align="left" height="300" width="180" ></a>
 
@@ -21,7 +20,7 @@
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic7.png?token=AE3geroYREmvV83VmKAVL-ASF-v-2qqvks5YoL1ewA%3D%3D" align="left" height="300" width="180" ></a>
 
 
-
+<hr>
 
 Treasure Hunt is an Android mobile application that is designed to give users an outdoor location based challenge. This involves players solving a series of geo-located clues in their quest to complete the game.
 The treasure hunt is designed to be played on a college campus and it attempts to bring an element of fun and adventure to the usual activity of a college tour. It also promotes bonding and team building to groups of people who may just have met, as well as a sense of camaraderie and competitiveness. Users can attempt to solve clues as part of a group or compete as rivals on different teams.
