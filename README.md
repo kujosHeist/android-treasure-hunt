@@ -1,7 +1,7 @@
 # Treasure Hunt Android App 
 
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic0.png)
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic1.png)
+![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic0.png?token=AE3geumvC1uH3Fj8kBKJYzXpSZdwK1Voks5YoLqmwA%3D%3D)
+![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic1.png?token=AE3geumvC1uH3Fj8kBKJYzXpSZdwK1Voks5YoLqmwA%3D%3D)
 ![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic2.png)
 ![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic3.png)
 
