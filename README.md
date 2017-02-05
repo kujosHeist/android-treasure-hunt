@@ -1,8 +1,27 @@
 # Treasure Hunt Android App 
 
-![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic0.png?token=AE3geumvC1uH3Fj8kBKJYzXpSZdwK1Voks5YoLqmwA%3D%3D width=48")
+
 
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic0.png?token=AE3geumvC1uH3Fj8kBKJYzXpSZdwK1Voks5YoLqmwA%3D%3D" align="left" height="200" width="120" ></a>
+
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic1.png?token=AE3gesRNQbCicreFAAzO_G8VGtCYOfwbks5YoLyFwA%3D%3D" align="left" height="200" width="120" ></a>
+
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic2.png?token=AE3gestVPFtXJ7-Ggq0_NOnbkxXOg1X6ks5YoLzZwA%3D%3D" align="left" height="200" width="120" ></a>
+
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic3.png?token=AE3geh-u-NhTz2J-J6a4RzE1fqUsUDY_ks5YoLzwwA%3D%3D" align="left" height="200" width="120" ></a>
+
+<br />
+
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic4.png?token=AE3gehfmUBQK2gP3iaaehHz_71ORIPnXks5YoL0vwA%3D%3D" align="left" height="200" width="120" ></a>
+
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic5.png?token=AE3gere2yC1shiFRD1ly5rc5k9J_GOLcks5YoL1AwA%3D%3D" align="left" height="200" width="120" ></a>
+
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic6.png?token=AE3gereC9kZ62Hevns5rzm4gA9FEPoCHks5YoL1RwA%3D%3D" align="left" height="200" width="120" ></a>
+
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic7.png?token=AE3geroYREmvV83VmKAVL-ASF-v-2qqvks5YoL1ewA%3D%3D" align="left" height="200" width="120" ></a>
+
+
+
 
 ![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic1.png?token=AE3geumvC1uH3Fj8kBKJYzXpSZdwK1Voks5YoLqmwA%3D%3D)
 ![alt tag](https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic2.png)
