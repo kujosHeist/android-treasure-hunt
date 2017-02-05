@@ -11,7 +11,7 @@
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic3.png?token=AE3geh-u-NhTz2J-J6a4RzE1fqUsUDY_ks5YoLzwwA%3D%3D" align="left" height="300" width="180" ></a>
 
 
-<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic4.png?token=AE3gehfmUBQK2gP3iaaehHz_71ORIPnXks5YoL0vwA%3D%3D" height="300" width="180" ></a>
+<a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic4.png?token=AE3gehfmUBQK2gP3iaaehHz_71ORIPnXks5YoL0vwA%3D%3D" align="left" height="300" width="180" ></a>
 
 <a href="url"><img src="https://raw.githubusercontent.com/kujosHeist/android-treasure-hunt/master/screens/pic5.png?token=AE3gere2yC1shiFRD1ly5rc5k9J_GOLcks5YoL1AwA%3D%3D" align="left" height="300" width="180" ></a>
 
