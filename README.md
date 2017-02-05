@@ -23,11 +23,12 @@
 
 </div>
 
-
+<p>
 Treasure Hunt is an Android mobile application that is designed to give users an outdoor location based challenge. This involves players solving a series of geo-located clues in their quest to complete the game.
 The treasure hunt is designed to be played on a college campus and it attempts to bring an element of fun and adventure to the usual activity of a college tour. It also promotes bonding and team building to groups of people who may just have met, as well as a sense of camaraderie and competitiveness. Users can attempt to solve clues as part of a group or compete as rivals on different teams.
 
 Each clue contains a hint to the location on campus where it can be solved, in the form of a polygon drawn on the map. This narrows down the focus of the area to be searched/explored.
+</p>
 
 ## Clue Types
 
